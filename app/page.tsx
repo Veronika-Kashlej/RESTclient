@@ -1,14 +1,15 @@
-import styles from './page.module.scss';
+import './App.scss';
+
+import Footer from '../src/components/footer/footer';
 
 export default function Home() {
   return (
-    <div className={styles.app} data-testid="app">
-      <header className={styles.header} data-testid="header">
-        <h1 className={styles.title}>Welcome to Next.js</h1>
-        <p className={styles.description}>
-          This is a Next.js application with TypeScript, ESLint, Prettier, and Vitest
-        </p>
-      </header>
+    <div className="app" data-testid="app">
+      <header data-testid="header">ssasasas</header>
+      <main style={{ flex: 1 }}>
+        <p>Postman clone is here</p>
+      </main>
+      <Footer></Footer>
     </div>
   );
 }

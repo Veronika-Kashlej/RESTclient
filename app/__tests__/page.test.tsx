@@ -6,8 +6,8 @@ describe('Home Page', () => {
   it('renders welcome message', () => {
     render(<Home />);
 
-    expect(screen.getByText('Welcome to Next.js')).toBeInTheDocument();
-    expect(screen.getByText(/This is a Next.js application/)).toBeInTheDocument();
+    // expect(screen.getByText('Welcome to Next.js')).toBeInTheDocument();
+    expect(screen.getByText(/Postman clone is here/)).toBeInTheDocument();
   });
 
   it('renders with correct structure', () => {
@@ -15,5 +15,6 @@ describe('Home Page', () => {
 
     expect(screen.getByTestId('app')).toBeInTheDocument();
     expect(screen.getByTestId('header')).toBeInTheDocument();
+    expect(screen.getByTestId('footer')).toBeInTheDocument();
   });
 });

@@ -47,6 +47,12 @@ export default tseslint.config(
       "react/prop-types": "off",
       ...nextPlugin.configs.recommended.rules,
       ...nextPlugin.configs["core-web-vitals"].rules,
+      "prettier/prettier": [
+        "error",
+        {
+          "endOfLine": "auto"
+        }
+      ]
     },
     settings: {
       react: {
