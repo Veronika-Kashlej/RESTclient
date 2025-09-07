@@ -3,5 +3,7 @@
 @use './utils/styles/general/general.sass' as *;
 
 @use './components/typo/typo.sass' as *;
+@use './components/navigation/navigation.sass' as *;
 @use './components/header/header.sass' as *;
 @use './components/footer/footer.sass' as *;
+@use './components/not-found/not-found.sass' as *;
