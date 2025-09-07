@@ -1,7 +1,7 @@
-@import '../src/utils/styles/general/vars.scss';
-@import '../src/utils/styles/mixins/_adaptive-properties.sass';
-@import '../src/utils/styles/general/general.sass';
+@use './utils/styles/general/vars.scss' as *;
+@use './utils/styles/mixins/_adaptive-properties.sass' as *;
+@use './utils/styles/general/general.sass' as *;
 
-@import '../src/components/typo/typo.sass';
-@import '../src/components/header/header.sass';
-@import '../src/components/footer/footer.sass';
+@use './components/typo/typo.sass' as *;
+@use './components/header/header.sass' as *;
+@use './components/footer/footer.sass' as *;

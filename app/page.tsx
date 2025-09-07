@@ -3,8 +3,8 @@ import './App.scss';
 
 import { useState, useEffect } from 'react';
 
-import Header from '../src/components/header/header';
-import Footer from '../src/components/footer/footer';
+import Header from './components/header/header';
+import Footer from './components/footer/footer';
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
