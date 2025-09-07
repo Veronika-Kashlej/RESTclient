@@ -1,0 +1,30 @@
+.header
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: aCalc(16) aCalc(80)
+  border-top: aCalc(2) solid #fc8803
+  box-shadow: 0 aCalc(6) aCalc(6) rgba(0, 0, 0, 0.2)
+  border-radius: aCalc(2)
+  position: sticky
+  background-color: #ffffff
+  z-index: 1
+  top: 0
+  transition: padding .3s, background-color .3s
+  &__btns 
+    display: flex
+    gap: aCalc(12)
+  img, svg, button 
+    transition: transform .3s
+  svg, img 
+    width: aCalc(80)
+    height: aCalc(80)
+    object-fit: cover
+    +mob($sm)
+      width: 50px
+      height: 50px
+  &._active 
+    padding: aCalc(9) aCalc(40)
+    background-color: #cebcbc
+    img, svg, button 
+      transform: scale(0.5)

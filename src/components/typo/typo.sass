@@ -33,3 +33,28 @@ h4, .h4
   +mob($sm)
     font-size: 16px
     line-height: 22px
+
+.btn-primary
+  padding: aCalc(14) aCalc(12)
+  border-radius: aCalc(4)
+  background-color: #fc8803
+  color: #ffffff
+  font-size: aCalc(20)
+  flex-shrink: 0
+  line-height: 100%
+  font-weight: 400
+  display: grid 
+  justify-content: center
+  align-items: center
+  transition: background-color .3s
+  +mob($sm)
+    height: 60px
+    padding: 20px 14px
+    font-size: 20px
+    border-radius: 4px
+    width: 100%
+  &:hover
+    background-color: #f7c48b
+
+.btn-language
+  @extend .btn-primary !optional

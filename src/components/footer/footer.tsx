@@ -16,7 +16,7 @@ const Footer = () => {
       </a>
       <p className="h4">2025</p>
       <a rel="noreferrer" target="_blank" href="https://rs.school/courses/reactjs">
-        <Image src={rsLogo} alt="404 error" width={1200} height={600} />
+        <Image src={rsLogo} alt="404 error" width={80} height={80} />
       </a>
     </footer>
   );
