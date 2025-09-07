@@ -1,11 +1,7 @@
 import React from 'react';
-
 import rsLogo from '../../assets/rss-logo.svg';
 import Image from 'next/image';
-
-interface Header {
-  className: string;
-}
+import type { Header } from '@/types/interfaces';
 
 const Header = (props: Header) => {
   return (
