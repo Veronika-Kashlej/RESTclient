@@ -3,20 +3,22 @@ h1, .h1
   color: inherit
   font-size: aCalc(48)
   line-height: aCalc(53)
-  letter-spacing: -0.03em
+  letter-spacing: aCalc(-1.14)
   +mob($sm)
     font-size: 28px
     line-height: 31px
+    letter-spacing: -1.14px
 
 h2, .h2
   color: inherit
   font-size: aCalc(38)
   line-height: aCalc(38)
   font-weight: 500
-  letter-spacing: -0.03em
+  letter-spacing: aCalc(-1.14)
   +mob($sm)
     font-size: 22px
     line-height: 24px
+    letter-spacing: -1.14px
 
 h3, .h3
   font-weight: 500
@@ -33,3 +35,30 @@ h4, .h4
   +mob($sm)
     font-size: 16px
     line-height: 22px
+
+.btn-primary
+  padding: aCalc(14) aCalc(12)
+  border-radius: aCalc(4)
+  background-color: #fc8803
+  color: #ffffff
+  font-size: aCalc(20)
+  flex-shrink: 0
+  line-height: 100%
+  font-weight: 400
+  display: grid 
+  justify-content: center
+  align-items: center
+  transition: background-color .3s
+  position: relative
+  +mob($sm)
+    height: 60px
+    padding: 20px 14px
+    font-size: 20px
+    border-radius: 4px
+    width: 100%
+  &:hover
+    background-color: #00d2ff
+
+
+.btn-language
+  @extend .btn-primary !optional
