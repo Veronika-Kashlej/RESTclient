@@ -1,12 +1,30 @@
+'use client';
 import './App.scss';
+
+import { useState, useEffect } from 'react';
 
 import Header from '../src/components/header/header';
 import Footer from '../src/components/footer/footer';
 
 export default function Home() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener('scroll', onScroll);
+    onScroll();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, []);
+
   return (
     <div className="app" data-testid="app">
-      <Header></Header>
+      <Header className={isScrolled ? 'header _active' : 'header'}></Header>
       <main style={{ flex: 1 }}>
         <p>Postman clone is here</p>
         <p className="h2">

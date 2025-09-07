@@ -11,11 +11,19 @@
   z-index: 1
   top: 0
   transition: padding .3s, background-color .3s
+  +mob($sm)
+    flex-direction: column
+    gap: 8px
+    padding: 16px
   &__btns 
     display: flex
     gap: aCalc(12)
+    +mob($sm)
+      flex-direction: column
+      gap: 8px
+      width: 100%
   img, svg, button 
-    transition: transform .3s
+    transition: transform .3s, background-color .3s, color .3s
   svg, img 
     width: aCalc(80)
     height: aCalc(80)
@@ -25,6 +33,10 @@
       height: 50px
   &._active 
     padding: aCalc(9) aCalc(40)
-    background-color: #cebcbc
+    background-color: #b5ebf7
     img, svg, button 
-      transform: scale(0.5)
+      transform: scale(0.8)
+    button 
+      background-color: #000000
+      &:hover 
+        color: #fc8803

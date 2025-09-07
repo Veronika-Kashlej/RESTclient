@@ -3,10 +3,14 @@ import React from 'react';
 import rsLogo from '../../assets/rss-logo.svg';
 import Image from 'next/image';
 
-const Header = () => {
+interface Header {
+  className: string;
+}
+
+const Header = (props: Header) => {
   return (
-    <header data-testid="header" className="header">
-      <a rel="noreferrer" target="_blank" href="https://rs.school/courses/reactjs">
+    <header data-testid="header" className={props.className}>
+      <a href="#">
         <Image src={rsLogo} alt="404 error" width={80} height={80} />
       </a>
       <button className="btn-language">Change to DE</button>
