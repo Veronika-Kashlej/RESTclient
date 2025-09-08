@@ -76,3 +76,20 @@ h4, .h4
   line-height: aCalc(26)
   font-weight: 500
   width: 100%
+
+.hollow 
+  color: #fc8803
+  text-decoration: none
+  font-weight: 500
+  padding: aCalc(8) aCalc(16)
+  border: 2px solid #fc8803
+  border-radius: aCalc(4)
+  transition: all .3s
+  display: inline-block
+  margin-right: aCalc(4)
+  +mob($sm)
+    padding: 8px 16px
+  
+  &:hover
+    background-color: #fc8803
+    color: white

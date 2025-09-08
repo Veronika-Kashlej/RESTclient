@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { auth } from './firebase/firebase';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
@@ -26,7 +27,30 @@ export default function Home() {
     <>
       <p>Postman clone is here</p>
       <p>Welcome, {user.email}</p>
+      <ul>
+        <li style={{ display: 'inline-block' }}>
+          <Link className="hollow" href="/">
+            Home
+          </Link>
+        </li>
+        <li style={{ display: 'inline-block' }}>
+          <Link className="hollow" href="/client">
+            Client
+          </Link>
+        </li>
+        <li style={{ display: 'inline-block' }}>
+          <Link className="hollow" href="/history">
+            History
+          </Link>
+        </li>
+        <li style={{ display: 'inline-block' }}>
+          <Link className="hollow" href="/variables">
+            Variables
+          </Link>
+        </li>
+      </ul>
       <button
+        className="signup-btn"
         onClick={() =>
           signOut(auth).then(() => {
             router.push('./sign-in');
