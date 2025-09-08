@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-// import './globals.css';
+import './App.scss';
+import MainLayout from './components/MainLayout';
 
 export const metadata: Metadata = {
   title: 'REST Client',
@@ -14,7 +15,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <MainLayout>{children}</MainLayout>
+      </body>
     </html>
   );
 }

@@ -1,1 +1,3 @@
-// TODO interfaces here
+export interface Header {
+  className: string;
+}

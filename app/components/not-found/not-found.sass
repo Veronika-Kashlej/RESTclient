@@ -1,0 +1,65 @@
+@use '../../utils/styles/general/vars.scss' as *;
+@use '../../utils/styles/mixins/_adaptive-properties.sass' as *;
+
+.not-found
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  min-height: 60vh
+  text-align: center
+  padding: aCalc(40)
+  +mob($sm)
+    padding: 40px 20px
+  
+  h1
+    font-size: aCalc(48)
+    color: #fc8803
+    margin-bottom: aCalc(20)
+    +mob($sm)
+      font-size: 36px
+      margin-bottom: 16px
+  
+  .h2
+    font-size: aCalc(24)
+    margin-bottom: aCalc(30)
+    color: inherit
+    +mob($sm)
+      font-size: 20px
+      margin-bottom: 24px
+  
+  .h3
+    font-size: aCalc(18)
+    color: inherit
+    
+    ul
+      list-style: none
+      padding: 0
+      margin: aCalc(20) 0 0 0
+      display: flex
+      flex-wrap: wrap
+      gap: aCalc(16)
+      justify-content: center
+      +mob($sm)
+        flex-direction: column
+        gap: 12px
+        margin: 16px 0 0 0
+      
+      li
+        margin: 0
+        
+        a
+          color: #fc8803
+          text-decoration: none
+          font-weight: 500
+          padding: aCalc(8) aCalc(16)
+          border: 2px solid #fc8803
+          border-radius: aCalc(4)
+          transition: all .3s
+          display: inline-block
+          +mob($sm)
+            padding: 8px 16px
+          
+          &:hover
+            background-color: #fc8803
+            color: white
