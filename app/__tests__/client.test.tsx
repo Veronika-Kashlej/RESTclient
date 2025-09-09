@@ -15,10 +15,11 @@ describe('Client Component', () => {
     expect(screen.getByText(/Test your REST APIs with our powerful client/)).toBeInTheDocument();
   });
 
-  it('renders placeholder content', () => {
+  it('renders method selector', () => {
     render(<ClientComponent />);
 
-    expect(screen.getByText(/API testing interface will be implemented here/)).toBeInTheDocument();
-    expect(screen.getByText(/Placeholder page for the client route/)).toBeInTheDocument();
+    expect(screen.getByText('HTTP Method:')).toBeInTheDocument();
+    expect(screen.getByTestId('method-selector-button')).toBeInTheDocument();
+    expect(screen.getByText('GET')).toBeInTheDocument();
   });
 });
