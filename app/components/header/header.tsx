@@ -9,7 +9,7 @@ const Header = (props: Header) => {
   return (
     <header data-testid="header" className={props.className}>
       <Link href="/">
-        <Image src={rsLogo} alt="RSS Logo" width={80} height={80} />
+        <Image src={rsLogo} alt="RSS Logo" width={80} height={80} priority />
       </Link>
       <Navigation />
       <div className="header__btns">
