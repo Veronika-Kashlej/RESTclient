@@ -1,24 +1,24 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import Client from '../client/page';
+import ClientComponent from '../client/ClientComponent';
 
-describe('Client Page', () => {
+describe('Client Component', () => {
   it('renders client title', () => {
-    render(<Client />);
+    render(<ClientComponent />);
 
     expect(screen.getByText('REST Client')).toBeInTheDocument();
   });
 
   it('renders client description', () => {
-    render(<Client />);
+    render(<ClientComponent />);
 
     expect(screen.getByText(/Test your REST APIs with our powerful client/)).toBeInTheDocument();
   });
 
   it('renders placeholder content', () => {
-    render(<Client />);
+    render(<ClientComponent />);
 
     expect(screen.getByText(/API testing interface will be implemented here/)).toBeInTheDocument();
-    expect(screen.getByText(/This is a placeholder page for the client route/)).toBeInTheDocument();
+    expect(screen.getByText(/Placeholder page for the client route/)).toBeInTheDocument();
   });
 });

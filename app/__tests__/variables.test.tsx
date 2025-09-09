@@ -1,16 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import Variables from '../variables/page';
+import VariablesComponent from '../variables/VariablesComponent';
 
-describe('Variables Page', () => {
+describe('Variables Component', () => {
   it('renders variables title', () => {
-    render(<Variables />);
+    render(<VariablesComponent />);
 
     expect(screen.getByText('Environment Variables')).toBeInTheDocument();
   });
 
   it('renders variables description', () => {
-    render(<Variables />);
+    render(<VariablesComponent />);
 
     expect(
       screen.getByText(/Manage your environment variables and configurations/)
@@ -18,7 +18,7 @@ describe('Variables Page', () => {
   });
 
   it('renders placeholder content', () => {
-    render(<Variables />);
+    render(<VariablesComponent />);
 
     expect(
       screen.getByText(/Variables management interface will be implemented here/)
