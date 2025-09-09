@@ -1,0 +1,75 @@
+.method-selector
+  position: relative
+  display: inline-block
+  min-width: 120px
+
+  &__dropdown
+    position: relative
+
+  &__button
+    display: flex
+    align-items: center
+    justify-content: space-between
+    width: 100%
+    padding: 8px 12px
+    border: 2px solid #e1e5e9
+    border-radius: 4px
+    background: #fff
+    cursor: pointer
+    font-size: 14px
+    font-weight: 500
+    transition: all 0.2s ease
+
+    &:hover
+      border-color: #007bff
+      background: #f8f9fa
+
+    &:focus
+      outline: none
+      border-color: #007bff
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1)
+
+  &__selected
+    color: #333
+    font-weight: 600
+
+  &__arrow
+    color: #666
+    font-size: 12px
+    transition: transform 0.2s ease
+
+  &__options
+    position: absolute
+    top: 100%
+    left: 0
+    right: 0
+    z-index: 1000
+    background: #fff
+    border: 2px solid #e1e5e9
+    border-top: none
+    border-radius: 0 0 4px 4px
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)
+    max-height: 200px
+    overflow-y: auto
+
+  &__option
+    display: block
+    width: 100%
+    padding: 8px 12px
+    border: none
+    background: transparent
+    text-align: left
+    cursor: pointer
+    font-size: 14px
+    color: #333
+    transition: background-color 0.2s ease
+
+    &:hover
+      background: #f8f9fa
+
+    &--selected
+      background: #007bff
+      color: #fff
+
+      &:hover
+        background: #0056b3
