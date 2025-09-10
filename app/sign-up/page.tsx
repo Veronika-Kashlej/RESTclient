@@ -9,12 +9,19 @@ export default function SignUp() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
+
+    if (password !== passwordConfirm) {
+      setError('Passwords do not match');
+      return;
+    }
+
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       router.push('/');
@@ -28,7 +35,7 @@ export default function SignUp() {
     <>
       <h1>Sign Up</h1>
       <p className="h2">Create your account to get started.</p>
-      <div className="h3">
+      <div className="h3 auth-wrapper">
         <form className="sign-upForm" onSubmit={handleRegister}>
           <input
             className="ui-input"
@@ -48,6 +55,14 @@ export default function SignUp() {
             required
           />
           <br />
+          <input
+            className="ui-input"
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Confirm Password"
+            value={passwordConfirm}
+            onChange={(e) => setPasswordConfirm(e.target.value)}
+            required
+          />
           <label className="ui-checkbox">
             <p className="h3">Show password</p>
             <input
