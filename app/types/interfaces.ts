@@ -8,3 +8,10 @@ export interface MethodSelectorProps {
   selectedMethod: HttpMethod;
   onMethodChange: (method: HttpMethod) => void;
 }
+
+export interface UrlInputProps {
+  url: string;
+  onUrlChange: (url: string) => void;
+  isValid: boolean;
+  errorMessage?: string;
+}

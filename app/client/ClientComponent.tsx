@@ -2,14 +2,20 @@
 
 import { useState } from 'react';
 import MethodSelector from '../components/MethodSelector';
+import UrlInput from '../components/UrlInput';
 import type { HttpMethod } from '../types/interfaces';
 import './ClientComponent.sass';
 
 export default function ClientComponent() {
   const [selectedMethod, setSelectedMethod] = useState<HttpMethod>('GET');
+  const [url, setUrl] = useState<string>('');
 
   const handleMethodChange = (method: HttpMethod) => {
     setSelectedMethod(method);
+  };
+
+  const handleUrlChange = (newUrl: string) => {
+    setUrl(newUrl);
   };
 
   return (
@@ -24,6 +30,8 @@ export default function ClientComponent() {
           </label>
           <MethodSelector selectedMethod={selectedMethod} onMethodChange={handleMethodChange} />
         </div>
+
+        <UrlInput url={url} onUrlChange={handleUrlChange} />
       </div>
     </>
   );
