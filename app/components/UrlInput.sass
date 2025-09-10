@@ -1,0 +1,49 @@
+.url-input
+  margin-bottom: 16px
+
+  &__label
+    display: block
+    margin-bottom: 8px
+    font-weight: 600
+    color: #333
+    font-size: 14px
+
+  &__container
+    position: relative
+
+  &__field
+    width: 100%
+    padding: 8px 12px
+    border: 2px solid #e1e5e9
+    border-radius: 4px
+    font-size: 14px
+    transition: border-color 0.2s ease
+    font-family: inherit
+
+    &:focus
+      outline: none
+      border-color: #007bff
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1)
+
+    &::placeholder
+      color: #999
+
+    &--error
+      border-color: #dc3545
+      
+      &:focus
+        border-color: #dc3545
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1)
+
+  &__error
+    position: absolute
+    top: 100%
+    left: 0
+    right: 0
+    margin-top: 4px
+    padding: 4px 8px
+    background: #f8d7da
+    color: #721c24
+    font-size: 12px
+    border-radius: 4px
+    border: 1px solid #f5c6cb

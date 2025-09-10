@@ -1,12 +1,20 @@
-export default function Client() {
+'use client';
+
+import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
+import withAuth from '../components/auth/withAuth';
+
+const ClientComponent = dynamic(() => import('./ClientComponent'), {
+  loading: () => <div>Loading REST Client...</div>,
+  ssr: false,
+});
+
+function Client() {
   return (
-    <>
-      <h1>REST Client</h1>
-      <p className="h2">Test your REST APIs with our powerful client.</p>
-      <div className="h3">
-        <p>API testing interface will be implemented here.</p>
-        <p>This is a placeholder page for the client route.</p>
-      </div>
-    </>
+    <Suspense fallback={<div>Loading REST Client...</div>}>
+      <ClientComponent />
+    </Suspense>
   );
 }
+
+export default withAuth(Client);

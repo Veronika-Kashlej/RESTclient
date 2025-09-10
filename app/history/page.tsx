@@ -1,12 +1,20 @@
-export default function History() {
+'use client';
+
+import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
+import withAuth from '../components/auth/withAuth';
+
+const HistoryComponent = dynamic(() => import('./HistoryComponent'), {
+  loading: () => <div>Loading History...</div>,
+  ssr: false,
+});
+
+function History() {
   return (
-    <>
-      <h1>Request History</h1>
-      <p className="h2">View and manage your API request history.</p>
-      <div className="h3">
-        <p>Request history interface will be implemented here.</p>
-        <p>This is a placeholder page for the history route.</p>
-      </div>
-    </>
+    <Suspense fallback={<div>Loading History...</div>}>
+      <HistoryComponent />
+    </Suspense>
   );
 }
+
+export default withAuth(History);

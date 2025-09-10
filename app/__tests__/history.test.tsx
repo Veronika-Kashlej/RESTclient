@@ -1,22 +1,22 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import History from '../history/page';
+import HistoryComponent from '../history/HistoryComponent';
 
-describe('History Page', () => {
+describe('History Component', () => {
   it('renders history title', () => {
-    render(<History />);
+    render(<HistoryComponent />);
 
     expect(screen.getByText('Request History')).toBeInTheDocument();
   });
 
   it('renders history description', () => {
-    render(<History />);
+    render(<HistoryComponent />);
 
     expect(screen.getByText(/View and manage your API request history/)).toBeInTheDocument();
   });
 
   it('renders placeholder content', () => {
-    render(<History />);
+    render(<HistoryComponent />);
 
     expect(
       screen.getByText(/Request history interface will be implemented here/)

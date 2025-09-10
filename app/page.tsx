@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { auth } from './firebase/firebase';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
@@ -27,28 +26,6 @@ export default function Home() {
     <>
       <p>Postman clone is here</p>
       <p>Welcome, {user.email}</p>
-      <ul>
-        <li style={{ display: 'inline-block' }}>
-          <Link className="hollow" href="/">
-            Home
-          </Link>
-        </li>
-        <li style={{ display: 'inline-block' }}>
-          <Link className="hollow" href="/client">
-            Client
-          </Link>
-        </li>
-        <li style={{ display: 'inline-block' }}>
-          <Link className="hollow" href="/history">
-            History
-          </Link>
-        </li>
-        <li style={{ display: 'inline-block' }}>
-          <Link className="hollow" href="/variables">
-            Variables
-          </Link>
-        </li>
-      </ul>
       <button
         className="signup-btn"
         onClick={() =>
@@ -59,86 +36,6 @@ export default function Home() {
       >
         Logout
       </button>
-      {/* <p className="h2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h3">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h3">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h3">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h3">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p>
-      <p className="h2">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus illum sint
-        exercitationem nisi consequuntur ratione excepturi dolormolestiae iustosed veniam ducimus
-        neque eligendi aspernatur quia quidem, natus harum quos.
-      </p> */}
     </>
   );
 }
