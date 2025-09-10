@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 export default function SignIn() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -39,13 +40,22 @@ export default function SignIn() {
           <br />
           <input
             className="ui-input"
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
           <br />
+          <label className="ui-checkbox">
+            <p className="h3">Show password</p>
+            <input
+              type="checkbox"
+              checked={showPassword}
+              onChange={() => setShowPassword(!showPassword)}
+            ></input>
+            <span></span>
+          </label>
           <button className="signin-btn" type="submit">
             Login
           </button>
