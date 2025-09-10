@@ -15,3 +15,14 @@ export interface UrlInputProps {
   isValid: boolean;
   errorMessage?: string;
 }
+
+export interface HeaderItem {
+  id: string;
+  key: string;
+  value: string;
+}
+
+export interface HeadersEditorProps {
+  headers: HeaderItem[];
+  onHeadersChange: (headers: HeaderItem[]) => void;
+}
