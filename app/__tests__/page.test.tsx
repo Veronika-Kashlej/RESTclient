@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import Home from '../page';
 import MainLayout from '../components/MainLayout';
+import AuthProviderWrapper from '@/components/authProviderWrapper/authProviderWrapper';
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
@@ -16,7 +17,11 @@ vi.mock('next/navigation', () => ({
 
 describe('Home Page', () => {
   it('renders welcome message', () => {
-    render(<Home />);
+    render(
+      <AuthProviderWrapper>
+        <Home />
+      </AuthProviderWrapper>
+    );
 
     // expect(screen.getByText(/Postman clone is here/)).toBeInTheDocument();
   });
@@ -24,7 +29,9 @@ describe('Home Page', () => {
   it('renders with correct structure', () => {
     render(
       <MainLayout>
-        <Home />
+        <AuthProviderWrapper>
+          <Home />
+        </AuthProviderWrapper>
       </MainLayout>
     );
 

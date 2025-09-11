@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './App.scss';
 import MainLayout from './components/MainLayout';
+import { AuthProvider } from './components/authContext/authContext';
 
 export const metadata: Metadata = {
   title: 'REST Client',
@@ -16,7 +17,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <MainLayout>{children}</MainLayout>
+        <AuthProvider>
+          <MainLayout>{children}</MainLayout>
+        </AuthProvider>
       </body>
     </html>
   );
