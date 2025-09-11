@@ -26,3 +26,10 @@ export interface HeadersEditorProps {
   headers: HeaderItem[];
   onHeadersChange: (headers: HeaderItem[]) => void;
 }
+
+export interface RequestData {
+  method: string;
+  url: string;
+  headers: Record<string, string>;
+  body?: string;
+}
