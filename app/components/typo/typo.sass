@@ -30,6 +30,10 @@ h3, .h3
   +mob($sm)
     font-size: 20px
     line-height: 24px
+  p 
+    font-weight: 600
+    display: inline
+    margin-left: aCalc(10) 
 
 h4, .h4
   color: inherit
@@ -38,6 +42,47 @@ h4, .h4
   +mob($sm)
     font-size: 16px
     line-height: 22px
+
+.ui-checkbox
+  display: flex
+  align-items: center
+  gap: aCalc(10)
+  width: 100% 
+  margin: aCalc(26) 0
+  input 
+    flex-shrink: 0
+    position: absolute
+    opacity: 0
+    width: 0
+    height: 0
+    z-index: 100
+    &:checked + span 
+      background-color: #007BFF
+      border-color: #007BFF
+      position: relative
+    &:checked + span::after  
+      content: ""
+      position: absolute
+      left: 5px
+      top: 1px
+      width: 5px
+      height: 10px
+      border: solid white
+      border-width: 0 2px 2px 0
+      transform: rotate(45deg)
+  span
+    flex-shrink: 0
+    cursor: pointer
+    display: block
+    width: 18px
+    height: 18px
+    border: 2px solid #666
+    border-radius: 4px
+    margin-right: 8px
+    box-sizing: border-box
+    transition: background-color 0.3s, border-color 0.3s
+    &:hover 
+      border-color: #7fd8d4
 
 .btn-primary
   padding: aCalc(14) aCalc(12)
