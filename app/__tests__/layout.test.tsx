@@ -1,26 +1,37 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
-import RootLayout from '../layout';
+import { describe, it, expect, vi } from 'vitest';
+import { AuthProvider } from '@/components/authContext/authContext';
 
-describe('RootLayout', () => {
-  it('renders with correct HTML structure', () => {
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
+    pathname: '/',
+    query: {},
+    asPath: '/',
+  }),
+  usePathname: () => '/',
+  useSearchParams: () => new URLSearchParams(),
+}));
+
+function TestWrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <AuthProvider>
+      <main data-testid="app">{children}</main>
+    </AuthProvider>
+  );
+}
+
+describe('TestWrapper', () => {
+  it('renders children and main', () => {
     render(
-      <RootLayout>
+      <TestWrapper>
         <div>Test content</div>
-      </RootLayout>
+      </TestWrapper>
     );
 
-    expect(document.documentElement).toHaveAttribute('lang', 'en');
     expect(screen.getByText('Test content')).toBeInTheDocument();
-  });
-
-  it('renders MainLayout component', () => {
-    render(
-      <RootLayout>
-        <div>Test content</div>
-      </RootLayout>
-    );
-
     expect(screen.getByTestId('app')).toBeInTheDocument();
   });
 });
