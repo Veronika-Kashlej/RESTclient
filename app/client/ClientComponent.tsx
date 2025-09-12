@@ -5,6 +5,7 @@ import MethodSelector from '../components/MethodSelector';
 import UrlInput from '../components/UrlInput';
 import HeadersEditor from '../components/HeadersEditor';
 import BodyEditor, { type BodyType } from '../components/BodyEditor';
+import CodeGenerator from '../components/codeGenerator/CodeGenerator';
 import type { HttpMethod, HeaderItem } from '../types/interfaces';
 import './ClientComponent.sass';
 
@@ -116,6 +117,13 @@ export default function ClientComponent() {
           bodyContent={bodyContent}
           onBodyTypeChange={handleBodyTypeChange}
           onBodyContentChange={handleBodyContentChange}
+        />
+
+        <CodeGenerator
+          method={selectedMethod}
+          url={url}
+          headers={headers}
+          bodyContent={bodyContent}
         />
 
         <div className="client-interface__send">
