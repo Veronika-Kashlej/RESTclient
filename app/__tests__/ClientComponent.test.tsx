@@ -107,6 +107,10 @@ vi.mock('../components/codeGenerator/CodeGenerator', () => ({
 
 vi.mock('../client/ClientComponent.sass', () => ({}));
 
+vi.mock('../hooks/useUrlSync', () => ({
+  useUrlSync: vi.fn(),
+}));
+
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
