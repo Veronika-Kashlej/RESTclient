@@ -1,12 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import MethodSelector from '../components/MethodSelector';
 import UrlInput from '../components/UrlInput';
 import HeadersEditor from '../components/HeadersEditor';
 import BodyEditor, { type BodyType } from '../components/BodyEditor';
 import CodeGenerator from '../components/codeGenerator/CodeGenerator';
+import { useUrlSync } from '../hooks/useUrlSync';
 import type { HttpMethod, HeaderItem } from '../types/interfaces';
+import type { RequestState } from '../utils/urlSync';
 import './ClientComponent.sass';
 
 export default function ClientComponent() {
@@ -24,6 +26,24 @@ export default function ClientComponent() {
   } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const requestState: RequestState = {
+    method: selectedMethod,
+    url,
+    headers,
+    bodyType,
+    bodyContent,
+  };
+
+  const handleStateRestore = useCallback((restoredState: RequestState) => {
+    setSelectedMethod(restoredState.method);
+    setUrl(restoredState.url);
+    setHeaders(restoredState.headers);
+    setBodyType(restoredState.bodyType);
+    setBodyContent(restoredState.bodyContent);
+  }, []);
+
+  useUrlSync(requestState, handleStateRestore);
 
   const handleMethodChange = (method: HttpMethod) => {
     setSelectedMethod(method);
