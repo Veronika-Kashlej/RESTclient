@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import MethodSelector from '../components/MethodSelector';
 import UrlInput from '../components/UrlInput';
 import HeadersEditor from '../components/HeadersEditor';
@@ -26,6 +26,7 @@ export default function ClientComponent() {
   } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isStateRestored, setIsStateRestored] = useState(false);
 
   const requestState: RequestState = {
     method: selectedMethod,
@@ -41,9 +42,66 @@ export default function ClientComponent() {
     setHeaders(restoredState.headers);
     setBodyType(restoredState.bodyType);
     setBodyContent(restoredState.bodyContent);
+    setIsStateRestored(true);
   }, []);
 
   useUrlSync(requestState, handleStateRestore);
+
+  useEffect(() => {
+    if (isStateRestored && url.trim()) {
+      setIsStateRestored(false);
+      const timer = setTimeout(() => {
+        if (!url.trim()) {
+          setError('Please enter a URL');
+          return;
+        }
+
+        setLoading(true);
+        setError(null);
+        setResponse(null);
+
+        const headersObj: Record<string, string> = {};
+        headers.forEach((header) => {
+          if (header.key.trim() && header.value.trim()) {
+            headersObj[header.key.trim()] = header.value.trim();
+          }
+        });
+
+        let requestBody = '';
+        if (bodyContent.trim() && ['POST', 'PUT', 'PATCH'].includes(selectedMethod)) {
+          requestBody = bodyContent.trim();
+        }
+
+        fetch('/api/request', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            method: selectedMethod,
+            url: url.trim(),
+            headers: headersObj,
+            body: requestBody,
+          }),
+        })
+          .then(async (apiResponse) => {
+            const data = await apiResponse.json();
+            if (!apiResponse.ok) {
+              throw new Error(data.error || 'Request failed');
+            }
+            setResponse(data);
+          })
+          .catch((err) => {
+            setError(err instanceof Error ? err.message : 'Request failed');
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }, 200);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isStateRestored, url, selectedMethod, headers, bodyContent]);
 
   const handleMethodChange = (method: HttpMethod) => {
     setSelectedMethod(method);

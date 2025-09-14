@@ -13,6 +13,18 @@ export function useUrlSync(
     }
   }, [onStateRestore]);
 
+  useEffect(() => {
+    const handlePopState = () => {
+      const restoredState = getRequestStateFromUrl();
+      if (restoredState) {
+        onStateRestore(restoredState);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [onStateRestore]);
+
   const updateUrl = useCallback(() => {
     updateUrlWithRequestState(state);
   }, [state]);
