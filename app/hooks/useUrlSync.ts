@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import type { RequestState } from '../utils/urlSync';
 import { getRequestStateFromUrl, updateUrlWithRequestState } from '../utils/urlSync';
 
@@ -6,11 +6,17 @@ export function useUrlSync(
   state: RequestState,
   onStateRestore: (restoredState: RequestState) => void
 ) {
+  const isInitialLoad = useRef(true);
+  const lastSavedState = useRef<string>('');
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     const restoredState = getRequestStateFromUrl();
     if (restoredState) {
       onStateRestore(restoredState);
+      lastSavedState.current = btoa(JSON.stringify(restoredState));
     }
+    isInitialLoad.current = false;
   }, [onStateRestore]);
 
   useEffect(() => {
@@ -18,6 +24,7 @@ export function useUrlSync(
       const restoredState = getRequestStateFromUrl();
       if (restoredState) {
         onStateRestore(restoredState);
+        lastSavedState.current = btoa(JSON.stringify(restoredState));
       }
     };
 
@@ -26,11 +33,30 @@ export function useUrlSync(
   }, [onStateRestore]);
 
   const updateUrl = useCallback(() => {
-    updateUrlWithRequestState(state);
+    if (isInitialLoad.current) return;
+
+    const currentState = btoa(JSON.stringify(state));
+    const timePause = 300;
+    if (currentState !== lastSavedState.current) {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+
+      debounceTimeout.current = setTimeout(() => {
+        updateUrlWithRequestState(state);
+        lastSavedState.current = currentState;
+      }, timePause);
+    }
   }, [state]);
 
   useEffect(() => {
     updateUrl();
+
+    return () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
   }, [updateUrl]);
 
   return {

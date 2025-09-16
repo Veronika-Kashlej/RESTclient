@@ -1,12 +1,48 @@
+.client-page-wrapper
+  width: 100%
+  max-width: 100%
+  display: block
+  justify-content: stretch
+  align-items: stretch
+  padding: 0
+  overflow: visible
+
+.client-page
+  max-width: 1200px
+  width: 100%
+  overflow-x: auto
+  display: flex
+  flex-direction: column
+  align-items: stretch
+  padding: 0 20px
+  box-sizing: border-box
+  margin: 0 auto
+
+  h1
+    width: 100%
+    text-align: left
+    margin-bottom: 8px
+
+  .h2
+    width: 100%
+    text-align: left
+    margin-bottom: 0
+
 .client-interface
   margin-top: 20px
   padding: 20px
   border: 1px solid #e1e5e9
   border-radius: 8px
   background: #f8f9fa
+  min-width: 100%
+  width: 100%
+  max-width: 100%
+  box-sizing: border-box
+  overflow-x: auto
 
   &__method
     margin-bottom: 16px
+    width: 100%
 
   &__label
     display: block
@@ -14,10 +50,12 @@
     font-weight: 600
     color: #333
     font-size: 14px
+    width: 100%
 
   &__send
     margin-top: 20px
     text-align: center
+    width: 100%
 
   &__send-btn
     background-color: #007bff
@@ -43,6 +81,9 @@
   border: 1px solid #e0e0e0
   border-radius: 8px
   background: #f8f9fa
+  min-width: 100%
+  width: 100%
+  box-sizing: border-box
 
   h2
     margin: 0 0 16px 0
@@ -93,12 +134,17 @@
   border: 1px solid #e0e0e0
   border-radius: 4px
   padding: 12px
+  min-width: 0
+  width: 100%
+  box-sizing: border-box
 
 .header-item
   display: flex
   margin-bottom: 8px
   font-family: monospace
   font-size: 14px
+  min-width: 0
+  width: 100%
 
   &:last-child
     margin-bottom: 0
@@ -107,11 +153,16 @@
   font-weight: bold
   margin-right: 8px
   min-width: 150px
+  max-width: 200px
   color: #333
+  flex-shrink: 0
 
 .header-value
   color: #666
-  word-break: break-all
+  word-break: break-word
+  overflow-wrap: break-word
+  min-width: 0
+  flex: 1
 
 .response-body
   h3
@@ -127,8 +178,14 @@
   margin: 0
   white-space: pre-wrap
   word-wrap: break-word
+  word-break: break-word
+  overflow-wrap: break-word
   font-family: monospace
   font-size: 14px
   line-height: 1.4
   max-height: 400px
   overflow-y: auto
+  overflow-x: auto
+  min-width: 0
+  width: 100%
+  box-sizing: border-box

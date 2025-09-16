@@ -1,12 +1,4 @@
-import type { HttpMethod, HeaderItem } from '../types/interfaces';
-
-export interface RequestState {
-  method: HttpMethod;
-  url: string;
-  headers: HeaderItem[];
-  bodyType: 'json' | 'text';
-  bodyContent: string;
-}
+import type { RequestState } from '../types/interfaces';
 
 export function encodeRequestState(state: RequestState): string {
   try {

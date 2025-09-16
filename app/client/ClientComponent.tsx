@@ -34,16 +34,27 @@ export default function ClientComponent() {
     headers,
     bodyType,
     bodyContent,
+    response,
+    error,
   };
 
-  const handleStateRestore = useCallback((restoredState: RequestState) => {
-    setSelectedMethod(restoredState.method);
-    setUrl(restoredState.url);
-    setHeaders(restoredState.headers);
-    setBodyType(restoredState.bodyType);
-    setBodyContent(restoredState.bodyContent);
-    setIsStateRestored(true);
-  }, []);
+  const handleStateRestore = useCallback(
+    (restoredState: RequestState) => {
+      setSelectedMethod(restoredState.method);
+      setUrl(restoredState.url);
+      setHeaders(restoredState.headers);
+      setBodyType(restoredState.bodyType);
+      setBodyContent(restoredState.bodyContent);
+      if (restoredState.response !== undefined) {
+        setResponse(restoredState.response);
+      }
+      if (restoredState.error !== undefined) {
+        setError(restoredState.error);
+      }
+      setIsStateRestored(true);
+    },
+    [setSelectedMethod, setUrl, setHeaders, setBodyType, setBodyContent, setResponse, setError]
+  );
 
   useUrlSync(requestState, handleStateRestore);
 
@@ -174,90 +185,92 @@ export default function ClientComponent() {
   };
 
   return (
-    <>
-      <h1>REST Client</h1>
-      <p className="h2">Test your REST APIs with our powerful client.</p>
+    <div className="client-page-wrapper">
+      <div className="client-page">
+        <h1>REST Client</h1>
+        <p className="h2">Test your REST APIs with our powerful client.</p>
 
-      <div className="client-interface">
-        <div className="client-interface__method">
-          <label htmlFor="method-selector" className="client-interface__label">
-            HTTP Method:
-          </label>
-          <MethodSelector selectedMethod={selectedMethod} onMethodChange={handleMethodChange} />
-        </div>
-
-        <UrlInput url={url} onUrlChange={handleUrlChange} />
-
-        <HeadersEditor headers={headers} onHeadersChange={handleHeadersChange} />
-
-        <BodyEditor
-          bodyType={bodyType}
-          bodyContent={bodyContent}
-          onBodyTypeChange={handleBodyTypeChange}
-          onBodyContentChange={handleBodyContentChange}
-        />
-
-        <CodeGenerator
-          method={selectedMethod}
-          url={url}
-          headers={headers}
-          bodyContent={bodyContent}
-        />
-
-        <div className="client-interface__send">
-          <button
-            className="client-interface__send-btn"
-            onClick={handleSendRequest}
-            disabled={loading}
-            data-testid="send-button"
-          >
-            {loading ? 'Sending...' : 'Send Request'}
-          </button>
-        </div>
-      </div>
-
-      {error && (
-        <div className="response-section response-section--error">
-          <h2>Error</h2>
-          <p>{error}</p>
-        </div>
-      )}
-
-      {response && (
-        <div className="response-section">
-          <h2>Response</h2>
-
-          <div className="response-status">
-            <span
-              className={`status-code ${response.status >= 200 && response.status < 300 ? 'success' : 'error'}`}
-            >
-              {response.status} {response.statusText}
-            </span>
-            <span className="response-time">{response.time}ms</span>
+        <div className="client-interface">
+          <div className="client-interface__method">
+            <label htmlFor="method-selector" className="client-interface__label">
+              HTTP Method:
+            </label>
+            <MethodSelector selectedMethod={selectedMethod} onMethodChange={handleMethodChange} />
           </div>
 
-          <div className="response-headers">
-            <h3>Headers</h3>
-            <div className="headers-list">
-              {Object.entries(response.headers).map(([key, value]) => (
-                <div key={key} className="header-item">
-                  <span className="header-key">{key}:</span>
-                  <span className="header-value">{value}</span>
-                </div>
-              ))}
+          <UrlInput url={url} onUrlChange={handleUrlChange} />
+
+          <HeadersEditor headers={headers} onHeadersChange={handleHeadersChange} />
+
+          <BodyEditor
+            bodyType={bodyType}
+            bodyContent={bodyContent}
+            onBodyTypeChange={handleBodyTypeChange}
+            onBodyContentChange={handleBodyContentChange}
+          />
+
+          <CodeGenerator
+            method={selectedMethod}
+            url={url}
+            headers={headers}
+            bodyContent={bodyContent}
+          />
+
+          <div className="client-interface__send">
+            <button
+              className="client-interface__send-btn"
+              onClick={handleSendRequest}
+              disabled={loading}
+              data-testid="send-button"
+            >
+              {loading ? 'Sending...' : 'Send Request'}
+            </button>
+          </div>
+        </div>
+
+        {error && (
+          <div className="response-section response-section--error">
+            <h2>Error</h2>
+            <p>{error}</p>
+          </div>
+        )}
+
+        {response && (
+          <div className="response-section">
+            <h2>Response</h2>
+
+            <div className="response-status">
+              <span
+                className={`status-code ${response.status >= 200 && response.status < 300 ? 'success' : 'error'}`}
+              >
+                {response.status} {response.statusText}
+              </span>
+              <span className="response-time">{response.time}ms</span>
+            </div>
+
+            <div className="response-headers">
+              <h3>Headers</h3>
+              <div className="headers-list">
+                {Object.entries(response.headers).map(([key, value]) => (
+                  <div key={key} className="header-item">
+                    <span className="header-key">{key}:</span>
+                    <span className="header-value">{value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="response-body">
+              <h3>Body</h3>
+              <pre className="response-body-content">
+                {typeof response.data === 'string'
+                  ? response.data
+                  : JSON.stringify(response.data, null, 2)}
+              </pre>
             </div>
           </div>
-
-          <div className="response-body">
-            <h3>Body</h3>
-            <pre className="response-body-content">
-              {typeof response.data === 'string'
-                ? response.data
-                : JSON.stringify(response.data, null, 2)}
-            </pre>
-          </div>
-        </div>
-      )}
-    </>
+        )}
+      </div>
+    </div>
   );
 }

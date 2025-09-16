@@ -33,3 +33,19 @@ export interface RequestData {
   headers: Record<string, string>;
   body?: string;
 }
+
+export interface RequestState {
+  method: HttpMethod;
+  url: string;
+  headers: HeaderItem[];
+  bodyType: 'json' | 'text';
+  bodyContent: string;
+  response?: {
+    status: number;
+    statusText: string;
+    headers: Record<string, string>;
+    data: unknown;
+    time: number;
+  } | null;
+  error?: string | null;
+}

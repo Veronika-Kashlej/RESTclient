@@ -32,7 +32,7 @@ export default function SignUp() {
   };
 
   return (
-    <>
+    <div className="auth-page">
       <h1>Sign Up</h1>
       <p className="h2">Create your account to get started.</p>
       <div className="h3 auth-wrapper">
@@ -78,6 +78,6 @@ export default function SignUp() {
         </form>
         {error && <p className="auth-wrapper__error">{error}</p>}
       </div>
-    </>
+    </div>
   );
 }
