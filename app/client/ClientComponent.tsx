@@ -7,8 +7,7 @@ import HeadersEditor from '../components/HeadersEditor';
 import BodyEditor, { type BodyType } from '../components/BodyEditor';
 import CodeGenerator from '../components/codeGenerator/CodeGenerator';
 import { useUrlSync } from '../hooks/useUrlSync';
-import type { HttpMethod, HeaderItem } from '../types/interfaces';
-import type { RequestState } from '../utils/urlSync';
+import type { HttpMethod, HeaderItem, RequestState } from '../types/interfaces';
 import './ClientComponent.sass';
 
 export default function ClientComponent() {

@@ -49,3 +49,31 @@ export interface RequestState {
   } | null;
   error?: string | null;
 }
+
+export interface Variable {
+  id: string;
+  key: string;
+  value: string;
+  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface VariableFormData {
+  key: string;
+  value: string;
+  description?: string;
+}
+
+export interface VariablesState {
+  variables: Variable[];
+  loading: boolean;
+  error: string | null;
+}
+
+export interface AddVariableModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAdd: (data: VariableFormData) => void;
+  error?: string | null;
+}
