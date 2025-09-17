@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import './App.scss';
 import MainLayout from './components/MainLayout';
 import { AuthProvider } from './components/authContext/authContext';
+import { ToastProvider } from './providers/ToastProvider';
+import ErrorBoundary from './components/ErrorBoundary';
 
 export const metadata: Metadata = {
   title: 'REST Client',
@@ -18,8 +20,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <AuthProvider>
-          <MainLayout>{children}</MainLayout>
+          <ErrorBoundary>
+            <MainLayout>{children}</MainLayout>
+          </ErrorBoundary>
         </AuthProvider>
+        <ToastProvider />
       </body>
     </html>
   );
