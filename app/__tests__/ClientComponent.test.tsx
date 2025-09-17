@@ -359,7 +359,7 @@ describe('ClientComponent', () => {
           method: 'POST',
           url: 'https://api.example.com',
           headers: {},
-          body: '{"test": "data"}',
+          body: '{"test":"data"}',
         }),
       });
     });
