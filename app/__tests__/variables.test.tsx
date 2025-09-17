@@ -16,15 +16,4 @@ describe('Variables Component', () => {
       screen.getByText(/Manage your environment variables and configurations/)
     ).toBeInTheDocument();
   });
-
-  it('renders placeholder content', () => {
-    render(<VariablesComponent />);
-
-    expect(
-      screen.getByText(/Variables management interface will be implemented here/)
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/This is a placeholder page for the variables route/)
-    ).toBeInTheDocument();
-  });
 });

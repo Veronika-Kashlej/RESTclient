@@ -33,3 +33,47 @@ export interface RequestData {
   headers: Record<string, string>;
   body?: string;
 }
+
+export interface RequestState {
+  method: HttpMethod;
+  url: string;
+  headers: HeaderItem[];
+  bodyType: 'json' | 'text';
+  bodyContent: string;
+  response?: {
+    status: number;
+    statusText: string;
+    headers: Record<string, string>;
+    data: unknown;
+    time: number;
+  } | null;
+  error?: string | null;
+}
+
+export interface Variable {
+  id: string;
+  key: string;
+  value: string;
+  description?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface VariableFormData {
+  key: string;
+  value: string;
+  description?: string;
+}
+
+export interface VariablesState {
+  variables: Variable[];
+  loading: boolean;
+  error: string | null;
+}
+
+export interface AddVariableModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAdd: (data: VariableFormData) => void;
+  error?: string | null;
+}

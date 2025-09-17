@@ -33,8 +33,12 @@ export const generateJavaScriptFetch = (data: RequestData): string => {
   method: '${method.toUpperCase()}'${headersObj}${bodyStr}
 })
   .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Error:', error));`;
+  .then(data => {
+    document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });`;
 };
 
 export const generateJavaScriptXHR = (data: RequestData): string => {
@@ -51,7 +55,8 @@ ${Object.entries(headers)
 xhr.onreadystatechange = function() {
   if (xhr.readyState === 4) {
     if (xhr.status === 200) {
-      console.log(JSON.parse(xhr.responseText));
+      const data = JSON.parse(xhr.responseText);
+      document.getElementById('result').textContent = JSON.stringify(data, null, 2);
     } else {
       console.error('Error:', xhr.status);
     }
@@ -89,7 +94,8 @@ const req = ${url.startsWith('https') ? 'https' : 'http'}.request('${url}', opti
   });
   
   res.on('end', () => {
-    console.log(JSON.parse(data));
+    const responseData = JSON.parse(data);
+    process.stdout.write(JSON.stringify(responseData, null, 2));
   });
 });
 

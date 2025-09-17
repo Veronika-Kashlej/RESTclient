@@ -107,6 +107,10 @@ vi.mock('../components/codeGenerator/CodeGenerator', () => ({
 
 vi.mock('../client/ClientComponent.sass', () => ({}));
 
+vi.mock('../hooks/useUrlSync', () => ({
+  useUrlSync: vi.fn(),
+}));
+
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
@@ -355,7 +359,7 @@ describe('ClientComponent', () => {
           method: 'POST',
           url: 'https://api.example.com',
           headers: {},
-          body: '{"test": "data"}',
+          body: '{"test":"data"}',
         }),
       });
     });

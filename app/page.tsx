@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from './components/authContext/authContext';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase/firebase';
+import styles from './page.module.scss';
 
 export default function Home() {
   const router = useRouter();
@@ -53,7 +54,7 @@ export default function Home() {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <>
+    <div className={styles['home-page']}>
       <p>Postman clone is here</p>
       <p>Welcome, {user.email}</p>
       <div className="h3">
@@ -63,6 +64,6 @@ export default function Home() {
       <button className="signup-btn" onClick={() => signOut()}>
         Logout
       </button>
-    </>
+    </div>
   );
 }

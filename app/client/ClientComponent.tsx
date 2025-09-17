@@ -1,12 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import MethodSelector from '../components/MethodSelector';
 import UrlInput from '../components/UrlInput';
 import HeadersEditor from '../components/HeadersEditor';
 import BodyEditor, { type BodyType } from '../components/BodyEditor';
 import CodeGenerator from '../components/codeGenerator/CodeGenerator';
-import type { HttpMethod, HeaderItem } from '../types/interfaces';
+import { useUrlSync } from '../hooks/useUrlSync';
+import { useVariables } from '../hooks/useVariables';
+import { substituteVariables, substituteVariablesInJson } from '../utils/variableSubstitution';
+import type { HttpMethod, HeaderItem, RequestState } from '../types/interfaces';
 import './ClientComponent.sass';
 
 export default function ClientComponent() {
@@ -24,6 +27,128 @@ export default function ClientComponent() {
   } | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isStateRestored, setIsStateRestored] = useState(false);
+
+  const { variables } = useVariables();
+
+  const requestState: RequestState = {
+    method: selectedMethod,
+    url,
+    headers,
+    bodyType,
+    bodyContent,
+    response,
+    error,
+  };
+
+  const handleStateRestore = useCallback(
+    (restoredState: RequestState) => {
+      setSelectedMethod(restoredState.method);
+      setUrl(restoredState.url);
+      setHeaders(restoredState.headers);
+      setBodyType(restoredState.bodyType);
+      setBodyContent(restoredState.bodyContent);
+      if (restoredState.response !== undefined) {
+        setResponse(restoredState.response);
+      }
+      if (restoredState.error !== undefined) {
+        setError(restoredState.error);
+      }
+      setIsStateRestored(true);
+    },
+    [setSelectedMethod, setUrl, setHeaders, setBodyType, setBodyContent, setResponse, setError]
+  );
+
+  const substituteRequestVariables = useCallback(
+    (url: string, headers: HeaderItem[], bodyContent: string) => {
+      const substitutedUrl = substituteVariables(url, variables);
+
+      const substitutedHeaders = headers.map((header) => ({
+        ...header,
+        value: substituteVariables(header.value, variables),
+      }));
+
+      let substitutedBody = bodyContent;
+      if (bodyType === 'json' && bodyContent.trim()) {
+        substitutedBody = substituteVariablesInJson(bodyContent, variables);
+      } else {
+        substitutedBody = substituteVariables(bodyContent, variables);
+      }
+
+      return {
+        url: substitutedUrl,
+        headers: substitutedHeaders,
+        body: substitutedBody,
+      };
+    },
+    [variables, bodyType]
+  );
+
+  useUrlSync(requestState, handleStateRestore);
+
+  useEffect(() => {
+    if (isStateRestored && url.trim()) {
+      setIsStateRestored(false);
+      const timer = setTimeout(() => {
+        if (!url.trim()) {
+          setError('Please enter a URL');
+          return;
+        }
+
+        setLoading(true);
+        setError(null);
+        setResponse(null);
+
+        const {
+          url: substitutedUrl,
+          headers: substitutedHeaders,
+          body: substitutedBody,
+        } = substituteRequestVariables(url, headers, bodyContent);
+
+        const headersObj: Record<string, string> = {};
+        substitutedHeaders.forEach((header) => {
+          if (header.key.trim() && header.value.trim()) {
+            headersObj[header.key.trim()] = header.value.trim();
+          }
+        });
+
+        let requestBody = '';
+        if (substitutedBody.trim() && ['POST', 'PUT', 'PATCH'].includes(selectedMethod)) {
+          requestBody = substitutedBody.trim();
+        }
+
+        const autoRequestPayload = {
+          method: selectedMethod,
+          url: substitutedUrl.trim(),
+          headers: headersObj,
+          body: requestBody,
+        };
+
+        fetch('/api/request', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(autoRequestPayload),
+        })
+          .then(async (apiResponse) => {
+            const data = await apiResponse.json();
+            if (!apiResponse.ok) {
+              throw new Error(data.error || 'Request failed');
+            }
+            setResponse(data);
+          })
+          .catch((err) => {
+            setError(err instanceof Error ? err.message : 'Request failed');
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }, 200);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isStateRestored, url, selectedMethod, headers, bodyContent, substituteRequestVariables]);
 
   const handleMethodChange = (method: HttpMethod) => {
     setSelectedMethod(method);
@@ -56,29 +181,37 @@ export default function ClientComponent() {
     setResponse(null);
 
     try {
+      const {
+        url: substitutedUrl,
+        headers: substitutedHeaders,
+        body: substitutedBody,
+      } = substituteRequestVariables(url, headers, bodyContent);
+
       const headersObj: Record<string, string> = {};
-      headers.forEach((header) => {
+      substitutedHeaders.forEach((header) => {
         if (header.key.trim() && header.value.trim()) {
           headersObj[header.key.trim()] = header.value.trim();
         }
       });
 
       let requestBody = '';
-      if (bodyContent.trim() && ['POST', 'PUT', 'PATCH'].includes(selectedMethod)) {
-        requestBody = bodyContent.trim();
+      if (substitutedBody.trim() && ['POST', 'PUT', 'PATCH'].includes(selectedMethod)) {
+        requestBody = substitutedBody.trim();
       }
+
+      const requestPayload = {
+        method: selectedMethod,
+        url: substitutedUrl.trim(),
+        headers: headersObj,
+        body: requestBody,
+      };
 
       const apiResponse = await fetch('/api/request', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          method: selectedMethod,
-          url: url.trim(),
-          headers: headersObj,
-          body: requestBody,
-        }),
+        body: JSON.stringify(requestPayload),
       });
 
       const data = await apiResponse.json();
@@ -96,90 +229,92 @@ export default function ClientComponent() {
   };
 
   return (
-    <>
-      <h1>REST Client</h1>
-      <p className="h2">Test your REST APIs with our powerful client.</p>
+    <div className="client-page-wrapper">
+      <div className="client-page">
+        <h1>REST Client</h1>
+        <p className="h2">Test your REST APIs with our powerful client.</p>
 
-      <div className="client-interface">
-        <div className="client-interface__method">
-          <label htmlFor="method-selector" className="client-interface__label">
-            HTTP Method:
-          </label>
-          <MethodSelector selectedMethod={selectedMethod} onMethodChange={handleMethodChange} />
-        </div>
-
-        <UrlInput url={url} onUrlChange={handleUrlChange} />
-
-        <HeadersEditor headers={headers} onHeadersChange={handleHeadersChange} />
-
-        <BodyEditor
-          bodyType={bodyType}
-          bodyContent={bodyContent}
-          onBodyTypeChange={handleBodyTypeChange}
-          onBodyContentChange={handleBodyContentChange}
-        />
-
-        <CodeGenerator
-          method={selectedMethod}
-          url={url}
-          headers={headers}
-          bodyContent={bodyContent}
-        />
-
-        <div className="client-interface__send">
-          <button
-            className="client-interface__send-btn"
-            onClick={handleSendRequest}
-            disabled={loading}
-            data-testid="send-button"
-          >
-            {loading ? 'Sending...' : 'Send Request'}
-          </button>
-        </div>
-      </div>
-
-      {error && (
-        <div className="response-section response-section--error">
-          <h2>Error</h2>
-          <p>{error}</p>
-        </div>
-      )}
-
-      {response && (
-        <div className="response-section">
-          <h2>Response</h2>
-
-          <div className="response-status">
-            <span
-              className={`status-code ${response.status >= 200 && response.status < 300 ? 'success' : 'error'}`}
-            >
-              {response.status} {response.statusText}
-            </span>
-            <span className="response-time">{response.time}ms</span>
+        <div className="client-interface">
+          <div className="client-interface__method">
+            <label htmlFor="method-selector" className="client-interface__label">
+              HTTP Method:
+            </label>
+            <MethodSelector selectedMethod={selectedMethod} onMethodChange={handleMethodChange} />
           </div>
 
-          <div className="response-headers">
-            <h3>Headers</h3>
-            <div className="headers-list">
-              {Object.entries(response.headers).map(([key, value]) => (
-                <div key={key} className="header-item">
-                  <span className="header-key">{key}:</span>
-                  <span className="header-value">{value}</span>
-                </div>
-              ))}
+          <UrlInput url={url} onUrlChange={handleUrlChange} />
+
+          <HeadersEditor headers={headers} onHeadersChange={handleHeadersChange} />
+
+          <BodyEditor
+            bodyType={bodyType}
+            bodyContent={bodyContent}
+            onBodyTypeChange={handleBodyTypeChange}
+            onBodyContentChange={handleBodyContentChange}
+          />
+
+          <CodeGenerator
+            method={selectedMethod}
+            url={url}
+            headers={headers}
+            bodyContent={bodyContent}
+          />
+
+          <div className="client-interface__send">
+            <button
+              className="client-interface__send-btn"
+              onClick={handleSendRequest}
+              disabled={loading}
+              data-testid="send-button"
+            >
+              {loading ? 'Sending...' : 'Send Request'}
+            </button>
+          </div>
+        </div>
+
+        {error && (
+          <div className="response-section response-section--error">
+            <h2>Error</h2>
+            <p>{error}</p>
+          </div>
+        )}
+
+        {response && (
+          <div className="response-section">
+            <h2>Response</h2>
+
+            <div className="response-status">
+              <span
+                className={`status-code ${response.status >= 200 && response.status < 300 ? 'success' : 'error'}`}
+              >
+                {response.status} {response.statusText}
+              </span>
+              <span className="response-time">{response.time}ms</span>
+            </div>
+
+            <div className="response-headers">
+              <h3>Headers</h3>
+              <div className="headers-list">
+                {Object.entries(response.headers).map(([key, value]) => (
+                  <div key={key} className="header-item">
+                    <span className="header-key">{key}:</span>
+                    <span className="header-value">{value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="response-body">
+              <h3>Body</h3>
+              <pre className="response-body-content">
+                {typeof response.data === 'string'
+                  ? response.data
+                  : JSON.stringify(response.data, null, 2)}
+              </pre>
             </div>
           </div>
-
-          <div className="response-body">
-            <h3>Body</h3>
-            <pre className="response-body-content">
-              {typeof response.data === 'string'
-                ? response.data
-                : JSON.stringify(response.data, null, 2)}
-            </pre>
-          </div>
-        </div>
-      )}
-    </>
+        )}
+      </div>
+    </div>
   );
 }

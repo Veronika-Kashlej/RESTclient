@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { hasVariables } from '../utils/variableSubstitution';
 import type { UrlInputProps } from '../types/interfaces';
 import './UrlInput.sass';
 
@@ -23,6 +24,10 @@ export default function UrlInput({
 
   const validateUrl = (url: string): boolean => {
     if (!url.trim()) return true;
+
+    if (hasVariables(url)) {
+      return true;
+    }
 
     try {
       if (url.includes('://')) {
