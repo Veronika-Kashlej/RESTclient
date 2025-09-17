@@ -7,6 +7,8 @@ import HeadersEditor from '../components/HeadersEditor';
 import BodyEditor, { type BodyType } from '../components/BodyEditor';
 import CodeGenerator from '../components/codeGenerator/CodeGenerator';
 import { useUrlSync } from '../hooks/useUrlSync';
+import { useVariables } from '../hooks/useVariables';
+import { substituteVariables, substituteVariablesInJson } from '../utils/variableSubstitution';
 import type { HttpMethod, HeaderItem, RequestState } from '../types/interfaces';
 import './ClientComponent.sass';
 
@@ -26,6 +28,8 @@ export default function ClientComponent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isStateRestored, setIsStateRestored] = useState(false);
+
+  const { variables } = useVariables();
 
   const requestState: RequestState = {
     method: selectedMethod,
@@ -55,6 +59,31 @@ export default function ClientComponent() {
     [setSelectedMethod, setUrl, setHeaders, setBodyType, setBodyContent, setResponse, setError]
   );
 
+  const substituteRequestVariables = useCallback(
+    (url: string, headers: HeaderItem[], bodyContent: string) => {
+      const substitutedUrl = substituteVariables(url, variables);
+
+      const substitutedHeaders = headers.map((header) => ({
+        ...header,
+        value: substituteVariables(header.value, variables),
+      }));
+
+      let substitutedBody = bodyContent;
+      if (bodyType === 'json' && bodyContent.trim()) {
+        substitutedBody = substituteVariablesInJson(bodyContent, variables);
+      } else {
+        substitutedBody = substituteVariables(bodyContent, variables);
+      }
+
+      return {
+        url: substitutedUrl,
+        headers: substitutedHeaders,
+        body: substitutedBody,
+      };
+    },
+    [variables, bodyType]
+  );
+
   useUrlSync(requestState, handleStateRestore);
 
   useEffect(() => {
@@ -70,29 +99,37 @@ export default function ClientComponent() {
         setError(null);
         setResponse(null);
 
+        const {
+          url: substitutedUrl,
+          headers: substitutedHeaders,
+          body: substitutedBody,
+        } = substituteRequestVariables(url, headers, bodyContent);
+
         const headersObj: Record<string, string> = {};
-        headers.forEach((header) => {
+        substitutedHeaders.forEach((header) => {
           if (header.key.trim() && header.value.trim()) {
             headersObj[header.key.trim()] = header.value.trim();
           }
         });
 
         let requestBody = '';
-        if (bodyContent.trim() && ['POST', 'PUT', 'PATCH'].includes(selectedMethod)) {
-          requestBody = bodyContent.trim();
+        if (substitutedBody.trim() && ['POST', 'PUT', 'PATCH'].includes(selectedMethod)) {
+          requestBody = substitutedBody.trim();
         }
+
+        const autoRequestPayload = {
+          method: selectedMethod,
+          url: substitutedUrl.trim(),
+          headers: headersObj,
+          body: requestBody,
+        };
 
         fetch('/api/request', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            method: selectedMethod,
-            url: url.trim(),
-            headers: headersObj,
-            body: requestBody,
-          }),
+          body: JSON.stringify(autoRequestPayload),
         })
           .then(async (apiResponse) => {
             const data = await apiResponse.json();
@@ -111,7 +148,7 @@ export default function ClientComponent() {
 
       return () => clearTimeout(timer);
     }
-  }, [isStateRestored, url, selectedMethod, headers, bodyContent]);
+  }, [isStateRestored, url, selectedMethod, headers, bodyContent, substituteRequestVariables]);
 
   const handleMethodChange = (method: HttpMethod) => {
     setSelectedMethod(method);
@@ -144,29 +181,37 @@ export default function ClientComponent() {
     setResponse(null);
 
     try {
+      const {
+        url: substitutedUrl,
+        headers: substitutedHeaders,
+        body: substitutedBody,
+      } = substituteRequestVariables(url, headers, bodyContent);
+
       const headersObj: Record<string, string> = {};
-      headers.forEach((header) => {
+      substitutedHeaders.forEach((header) => {
         if (header.key.trim() && header.value.trim()) {
           headersObj[header.key.trim()] = header.value.trim();
         }
       });
 
       let requestBody = '';
-      if (bodyContent.trim() && ['POST', 'PUT', 'PATCH'].includes(selectedMethod)) {
-        requestBody = bodyContent.trim();
+      if (substitutedBody.trim() && ['POST', 'PUT', 'PATCH'].includes(selectedMethod)) {
+        requestBody = substitutedBody.trim();
       }
+
+      const requestPayload = {
+        method: selectedMethod,
+        url: substitutedUrl.trim(),
+        headers: headersObj,
+        body: requestBody,
+      };
 
       const apiResponse = await fetch('/api/request', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          method: selectedMethod,
-          url: url.trim(),
-          headers: headersObj,
-          body: requestBody,
-        }),
+        body: JSON.stringify(requestPayload),
       });
 
       const data = await apiResponse.json();

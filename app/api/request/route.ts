@@ -1,5 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+async function processResponse(response: Response, time: number) {
+  const responseHeaders: Record<string, string> = {};
+  response.headers.forEach((value, key) => {
+    responseHeaders[key] = value;
+  });
+
+  let responseData: unknown;
+  const contentType = response.headers.get('content-type');
+
+  if (contentType?.includes('application/json')) {
+    responseData = await response.json();
+  } else {
+    responseData = await response.text();
+  }
+
+  return NextResponse.json({
+    status: response.status,
+    statusText: response.statusText,
+    headers: responseHeaders,
+    data: responseData,
+    time,
+  });
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -22,32 +46,18 @@ export async function POST(request: NextRequest) {
     }
 
     const startTime = Date.now();
-    const response = await fetch(url, fetchOptions);
-    const endTime = Date.now();
 
-    const responseHeaders: Record<string, string> = {};
-    response.headers.forEach((value, key) => {
-      responseHeaders[key] = value;
-    });
+    try {
+      const response = await fetch(url, fetchOptions);
+      const endTime = Date.now();
 
-    let responseData: unknown;
-    const contentType = response.headers.get('content-type');
-
-    if (contentType?.includes('application/json')) {
-      responseData = await response.json();
-    } else {
-      responseData = await response.text();
+      return await processResponse(response, endTime - startTime);
+    } catch (fetchError) {
+      console.error('🚫 Fetch failed:', fetchError);
+      throw fetchError;
     }
-
-    return NextResponse.json({
-      status: response.status,
-      statusText: response.statusText,
-      headers: responseHeaders,
-      data: responseData,
-      time: endTime - startTime,
-    });
   } catch (error) {
-    console.error('Request error:', error);
+    console.error('❌ Request error:', error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Request failed' },
       { status: 500 }
