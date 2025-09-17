@@ -1,0 +1,21 @@
+@use '../utils/styles/general/vars.scss' as *;
+@use '../utils/styles/mixins/_adaptive-properties.sass' as *;
+
+.history-content 
+  margin: aCalc(50) 0 aCalc(100)
+  
+.history-el
+  display: flex
+  align-items: center
+  gap: aCalc(16)
+  margin-top: aCalc(10)
+  padding: aCalc(10)
+  border-radius: aCalc(4)
+  background-color: #474646
+  p 
+    font-weight: 600
+  p, .h3 
+    color: #ece9e9
+  &._method 
+    background-color: #fc8803
+    margin-top: aCalc(60)

@@ -10,6 +10,10 @@ import { useUrlSync } from '../hooks/useUrlSync';
 import { useVariables } from '../hooks/useVariables';
 import { substituteVariables, substituteVariablesInJson } from '../utils/variableSubstitution';
 import type { HttpMethod, HeaderItem, RequestState } from '../types/interfaces';
+
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase/firebase';
+
 import './ClientComponent.sass';
 
 export default function ClientComponent() {
@@ -180,6 +184,8 @@ export default function ClientComponent() {
     setError(null);
     setResponse(null);
 
+    const startTime = performance.now();
+
     try {
       const {
         url: substitutedUrl,
@@ -214,13 +220,38 @@ export default function ClientComponent() {
         body: JSON.stringify(requestPayload),
       });
 
-      const data = await apiResponse.json();
+      const endTime = performance.now();
+      const durationMs = endTime - startTime;
+
+      const status = apiResponse.status;
+
+      const requestSize = new TextEncoder().encode(JSON.stringify(requestPayload)).length;
+
+      const responseText = await apiResponse.text();
+      const responseSize = new TextEncoder().encode(responseText).length;
+
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        data = null;
+      }
 
       if (!apiResponse.ok) {
-        throw new Error(data.error || 'Request failed');
+        throw new Error(data?.error || 'Request failed');
       }
 
       setResponse(data);
+
+      await addDoc(collection(db, 'requests'), {
+        method: selectedMethod,
+        url: substitutedUrl.trim(),
+        status,
+        timingMs: durationMs,
+        requestSizeBytes: requestSize,
+        responseSizeBytes: responseSize,
+        timestamp: serverTimestamp(),
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Request failed');
     } finally {
