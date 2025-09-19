@@ -210,12 +210,6 @@ describe('ClientComponent', () => {
     fireEvent.change(urlInput, { target: { value: 'https://api.example.com' } });
     fireEvent.click(sendButton);
 
-    // await waitFor(() => {
-    //   expect(screen.getByText('Response')).toBeInTheDocument();
-    //   expect(screen.getByText('200 OK')).toBeInTheDocument();
-    //   expect(screen.getByText('150ms')).toBeInTheDocument();
-    // });
-
     expect(mockFetch).toHaveBeenCalledWith('/api/request', {
       method: 'POST',
       headers: {

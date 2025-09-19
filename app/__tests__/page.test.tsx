@@ -23,7 +23,7 @@ describe('Home Page', () => {
       </AuthProviderWrapper>
     );
 
-    // expect(screen.getByText(/Postman clone is here/)).toBeInTheDocument();
+    expect(screen.getByText(/Loading.../)).toBeInTheDocument();
   });
 
   it('renders with correct structure', () => {
