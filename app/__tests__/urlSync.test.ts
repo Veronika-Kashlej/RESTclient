@@ -5,7 +5,7 @@ import {
   getRequestStateFromUrl,
   updateUrlWithRequestState,
 } from '../utils/urlSync';
-import type { RequestState } from '../utils/urlSync';
+import { RequestState } from '@/types/interfaces';
 
 const mockWindow = {
   location: {
