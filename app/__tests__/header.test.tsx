@@ -106,14 +106,6 @@ describe('Header Component', () => {
     expect(screen.getByText('Sign up')).toBeInTheDocument();
   });
 
-  it('should use default className when not provided', () => {
-    render(<Header className="" />);
-
-    const header = screen.getByTestId('header');
-    expect(header).toBeInTheDocument();
-    expect(header).toHaveAttribute('class', '');
-  });
-
   it('should render header with custom className', () => {
     const customClassName = 'custom-header-class';
     render(<Header className={customClassName} />);

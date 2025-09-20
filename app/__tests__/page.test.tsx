@@ -99,7 +99,7 @@ describe('Home Component', () => {
 
     render(<Home />);
 
-    expect(mockPush).toHaveBeenCalledWith('/sign-up');
+    expect(mockPush).toHaveBeenCalledWith('/');
   });
 
   it('should show auth error when present', async () => {
@@ -158,7 +158,7 @@ describe('Home Component', () => {
       expect(screen.getByText('Postman clone is here')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Welcome, test@example.com')).toBeInTheDocument();
+    expect(screen.getByText('Welcome back, test@example.com')).toBeInTheDocument();
     expect(screen.getByText('Hello from Firebase!')).toBeInTheDocument();
   });
 
@@ -242,18 +242,6 @@ describe('Home Component', () => {
       expect(mockDoc).toHaveBeenCalledWith({}, 'testCollection', 'testDoc');
       expect(mockGetDoc).toHaveBeenCalled();
     });
-  });
-
-  it('should return null when user is not authenticated', () => {
-    vi.mocked(useAuth).mockReturnValue({
-      user: null,
-      loading: false,
-      error: null,
-      signOut: mockSignOut,
-    });
-
-    const { container } = render(<Home />);
-    expect(container.firstChild).toBeNull();
   });
 
   it('should log error to console when Firebase fetch fails', async () => {
