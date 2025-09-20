@@ -28,10 +28,5 @@ describe('Sign Up Page', () => {
 
   it('renders placeholder content', () => {
     render(<SignUp />);
-
-    // expect(screen.getByText(/Registration form will be implemented here/)).toBeInTheDocument();
-    // expect(
-    //   screen.getByText(/This is a placeholder page for the sign-up route/)
-    // ).toBeInTheDocument();
   });
 });

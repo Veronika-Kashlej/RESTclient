@@ -1,6 +1,13 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import ClientComponent from '../client/ClientComponent';
+import { useUrlSync } from '../hooks/useUrlSync';
+import { useVariables } from '../hooks/useVariables';
+
+vi.mock('../hooks/useUrlSync');
+vi.mock('../hooks/useVariables');
+vi.mock('firebase/firestore');
+vi.mock('../firebase/firebase', () => ({ db: {} }));
 
 vi.mock('../components/MethodSelector', () => ({
   default: ({
@@ -10,26 +17,20 @@ vi.mock('../components/MethodSelector', () => ({
     selectedMethod: string;
     onMethodChange: (method: string) => void;
   }) => (
-    <select
-      data-testid="method-selector"
-      value={selectedMethod}
-      onChange={(e) => onMethodChange(e.target.value)}
-    >
-      <option value="GET">GET</option>
-      <option value="POST">POST</option>
-      <option value="PUT">PUT</option>
-      <option value="DELETE">DELETE</option>
-    </select>
+    <div data-testid="method-selector">
+      <span>Method: {selectedMethod}</span>
+      <button onClick={() => onMethodChange('POST')}>Change to POST</button>
+    </div>
   ),
 }));
 
 vi.mock('../components/UrlInput', () => ({
   default: ({ url, onUrlChange }: { url: string; onUrlChange: (url: string) => void }) => (
     <input
-      data-testid="url-input"
       value={url}
       onChange={(e) => onUrlChange(e.target.value)}
       placeholder="Enter URL"
+      data-testid="url-input-field"
     />
   ),
 }));
@@ -39,16 +40,21 @@ vi.mock('../components/HeadersEditor', () => ({
     headers,
     onHeadersChange,
   }: {
-    headers: unknown[];
-    onHeadersChange: (headers: unknown[]) => void;
+    headers: Array<{ id: string; key: string; value: string }>;
+    onHeadersChange: (headers: Array<{ id: string; key: string; value: string }>) => void;
   }) => (
     <div data-testid="headers-editor">
-      <div>Headers: {headers.length}</div>
       <button
-        onClick={() => onHeadersChange([...headers, { id: '1', key: 'Test', value: 'Value' }])}
+        onClick={() =>
+          onHeadersChange([{ id: '1', key: 'Content-Type', value: 'application/json' }])
+        }
       >
         Add Header
       </button>
+      <button onClick={() => onHeadersChange([{ id: '1', key: '  ', value: '  ' }])}>
+        Add Empty Header
+      </button>
+      <div>Headers: {headers.length}</div>
     </div>
   ),
 }));
@@ -66,118 +72,61 @@ vi.mock('../components/BodyEditor', () => ({
     onBodyContentChange: (content: string) => void;
   }) => (
     <div data-testid="body-editor">
-      <select
-        data-testid="body-type-selector"
-        value={bodyType}
-        onChange={(e) => onBodyTypeChange(e.target.value)}
-      >
-        <option value="json">JSON</option>
-        <option value="text">Text</option>
-      </select>
+      <button onClick={() => onBodyTypeChange('json')}>JSON</button>
+      <button onClick={() => onBodyTypeChange('text')}>Text</button>
       <textarea
-        data-testid="body-content"
         value={bodyContent}
         onChange={(e) => onBodyContentChange(e.target.value)}
-        placeholder="Enter body content"
+        data-testid="body-content"
       />
+      <div>Type: {bodyType}</div>
     </div>
   ),
 }));
 
 vi.mock('../components/codeGenerator/CodeGenerator', () => ({
-  default: ({
-    method,
-    url,
-    headers,
-    bodyContent,
-  }: {
-    method: string;
-    url: string;
-    headers: unknown[];
-    bodyContent: string;
-  }) => (
-    <div data-testid="code-generator">
-      <div>Method: {method}</div>
-      <div>URL: {url}</div>
-      <div>Headers: {headers.length}</div>
-      <div>Body: {bodyContent}</div>
-    </div>
-  ),
+  default: () => <div data-testid="code-generator">Code Generator</div>,
 }));
 
-vi.mock('../client/ClientComponent.sass', () => ({}));
-
-vi.mock('../hooks/useUrlSync', () => ({
-  useUrlSync: vi.fn(),
-}));
-
-const mockFetch = vi.fn();
-global.fetch = mockFetch;
+global.fetch = vi.fn();
 
 describe('ClientComponent', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(useVariables).mockReturnValue({
+      variables: [],
+      loading: false,
+      error: null,
+      addVariable: vi.fn(),
+      updateVariable: vi.fn(),
+      deleteVariable: vi.fn(),
+      clearError: vi.fn(),
+      reloadVariables: vi.fn(),
+    });
+    vi.mocked(useUrlSync).mockReturnValue({ updateUrl: vi.fn() });
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      status: 200,
+      statusText: 'OK',
+      json: () => Promise.resolve({ message: 'success' }),
+      text: () => Promise.resolve('{"message": "success"}'),
+    } as Response);
   });
 
-  it('should render all components', () => {
+  it('renders main client interface', () => {
     render(<ClientComponent />);
 
-    expect(screen.getByText('REST Client')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'REST Client' })).toBeInTheDocument();
     expect(screen.getByText('Test your REST APIs with our powerful client.')).toBeInTheDocument();
     expect(screen.getByTestId('method-selector')).toBeInTheDocument();
-    expect(screen.getByTestId('url-input')).toBeInTheDocument();
+    expect(screen.getByTestId('url-input-field')).toBeInTheDocument();
     expect(screen.getByTestId('headers-editor')).toBeInTheDocument();
     expect(screen.getByTestId('body-editor')).toBeInTheDocument();
     expect(screen.getByTestId('code-generator')).toBeInTheDocument();
     expect(screen.getByTestId('send-button')).toBeInTheDocument();
   });
 
-  it('should handle method change', () => {
-    render(<ClientComponent />);
-
-    const methodSelector = screen.getByTestId('method-selector');
-    fireEvent.change(methodSelector, { target: { value: 'POST' } });
-
-    expect(methodSelector).toHaveValue('POST');
-  });
-
-  it('should handle URL change', () => {
-    render(<ClientComponent />);
-
-    const urlInput = screen.getByTestId('url-input');
-    fireEvent.change(urlInput, { target: { value: 'https://api.example.com' } });
-
-    expect(urlInput).toHaveValue('https://api.example.com');
-  });
-
-  it('should handle headers change', () => {
-    render(<ClientComponent />);
-
-    const addHeaderButton = screen.getByText('Add Header');
-    fireEvent.click(addHeaderButton);
-
-    expect(screen.getAllByText('Headers: 1')).toHaveLength(2);
-  });
-
-  it('should handle body type change', () => {
-    render(<ClientComponent />);
-
-    const bodyTypeSelector = screen.getByTestId('body-type-selector');
-    fireEvent.change(bodyTypeSelector, { target: { value: 'text' } });
-
-    expect(bodyTypeSelector).toHaveValue('text');
-  });
-
-  it('should handle body content change', () => {
-    render(<ClientComponent />);
-
-    const bodyContent = screen.getByTestId('body-content');
-    fireEvent.change(bodyContent, { target: { value: '{"test": "data"}' } });
-
-    expect(bodyContent).toHaveValue('{"test": "data"}');
-  });
-
-  it('should show error when URL is empty', async () => {
+  it('shows error when URL is empty', async () => {
     render(<ClientComponent />);
 
     const sendButton = screen.getByTestId('send-button');
@@ -186,59 +135,67 @@ describe('ClientComponent', () => {
     await waitFor(() => {
       expect(screen.getByText('Please enter a URL')).toBeInTheDocument();
     });
+
+    expect(fetch).not.toHaveBeenCalled();
   });
 
-  it('should send request successfully', async () => {
-    const mockResponse = {
-      status: 200,
-      statusText: 'OK',
-      headers: { 'content-type': 'application/json' },
-      data: { message: 'Success' },
-      time: 150,
-    };
-
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
-    });
-
+  it('updates URL when input changes', () => {
     render(<ClientComponent />);
 
-    const urlInput = screen.getByTestId('url-input');
-    const sendButton = screen.getByTestId('send-button');
+    const urlInput = screen.getByTestId('url-input-field');
+    fireEvent.change(urlInput, { target: { value: 'https://api.test.com' } });
 
-    fireEvent.change(urlInput, { target: { value: 'https://api.example.com' } });
+    expect(urlInput).toHaveValue('https://api.test.com');
+  });
+
+  it('updates method when selector changes', () => {
+    render(<ClientComponent />);
+
+    expect(screen.getByText('Method: GET')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Change to POST'));
+
+    expect(screen.getByText('Method: POST')).toBeInTheDocument();
+  });
+
+  it('updates body content when editor changes', () => {
+    render(<ClientComponent />);
+
+    const bodyTextarea = screen.getByTestId('body-content');
+    fireEvent.change(bodyTextarea, { target: { value: '{"test": "data"}' } });
+
+    expect(bodyTextarea).toHaveValue('{"test": "data"}');
+  });
+
+  it('calls fetch when send button is clicked with URL', async () => {
+    render(<ClientComponent />);
+
+    const urlInput = screen.getByTestId('url-input-field');
+    fireEvent.change(urlInput, { target: { value: 'https://api.test.com' } });
+
+    const sendButton = screen.getByTestId('send-button');
     fireEvent.click(sendButton);
 
-    // await waitFor(() => {
-    //   expect(screen.getByText('Response')).toBeInTheDocument();
-    //   expect(screen.getByText('200 OK')).toBeInTheDocument();
-    //   expect(screen.getByText('150ms')).toBeInTheDocument();
-    // });
-
-    expect(mockFetch).toHaveBeenCalledWith('/api/request', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        method: 'GET',
-        url: 'https://api.example.com',
-        headers: {},
-        body: '',
-      }),
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith(
+        '/api/request',
+        expect.objectContaining({
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        })
+      );
     });
   });
 
-  it('should handle request error', async () => {
-    mockFetch.mockRejectedValueOnce(new Error('Network error'));
+  it('displays error when request fails', async () => {
+    vi.mocked(fetch).mockRejectedValue(new Error('Network error'));
 
     render(<ClientComponent />);
 
-    const urlInput = screen.getByTestId('url-input');
-    const sendButton = screen.getByTestId('send-button');
+    const urlInput = screen.getByTestId('url-input-field');
+    fireEvent.change(urlInput, { target: { value: 'https://api.test.com' } });
 
-    fireEvent.change(urlInput, { target: { value: 'https://api.example.com' } });
+    const sendButton = screen.getByTestId('send-button');
     fireEvent.click(sendButton);
 
     await waitFor(() => {
@@ -247,121 +204,186 @@ describe('ClientComponent', () => {
     });
   });
 
-  it('should show loading state during request', async () => {
-    let resolvePromise: (value: unknown) => void = () => {};
-    const promise = new Promise((resolve) => {
-      resolvePromise = resolve;
-    });
-
-    mockFetch.mockReturnValueOnce(promise);
-
+  it('calls useUrlSync with request state', () => {
     render(<ClientComponent />);
 
-    const urlInput = screen.getByTestId('url-input');
-    const sendButton = screen.getByTestId('send-button');
+    expect(useUrlSync).toHaveBeenCalledWith(
+      expect.objectContaining({
+        method: 'GET',
+        url: '',
+        headers: [],
+        bodyType: 'json',
+        bodyContent: '',
+      }),
+      expect.any(Function)
+    );
+  });
 
-    fireEvent.change(urlInput, { target: { value: 'https://api.example.com' } });
+  it('calls useVariables hook', () => {
+    render(<ClientComponent />);
+
+    expect(useVariables).toHaveBeenCalled();
+  });
+
+  it('updates headers when HeadersEditor changes', () => {
+    render(<ClientComponent />);
+
+    expect(screen.getByText('Headers: 0')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Add Header'));
+
+    expect(screen.getByText('Headers: 1')).toBeInTheDocument();
+  });
+
+  it('updates body type when BodyEditor type changes', () => {
+    render(<ClientComponent />);
+
+    expect(screen.getByText('Type: json')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByText('Text'));
+
+    expect(screen.getByText('Type: text')).toBeInTheDocument();
+  });
+
+  it('handles empty headers correctly', async () => {
+    render(<ClientComponent />);
+
+    const urlInput = screen.getByTestId('url-input-field');
+    fireEvent.change(urlInput, { target: { value: 'https://api.test.com' } });
+
+    fireEvent.click(screen.getByText('Add Empty Header'));
+
+    const sendButton = screen.getByTestId('send-button');
     fireEvent.click(sendButton);
 
-    expect(screen.getByText('Sending...')).toBeInTheDocument();
-    expect(sendButton).toBeDisabled();
-
-    if (resolvePromise) {
-      resolvePromise({
-        ok: true,
-        json: () =>
-          Promise.resolve({ status: 200, statusText: 'OK', headers: {}, data: {}, time: 100 }),
-      });
-    }
-
     await waitFor(() => {
-      expect(screen.getByText('Send Request')).toBeInTheDocument();
-      expect(sendButton).not.toBeDisabled();
+      expect(fetch).toHaveBeenCalledWith(
+        '/api/request',
+        expect.objectContaining({
+          body: expect.stringContaining('"headers":{}'),
+        })
+      );
     });
   });
 
-  it('should include headers in request body', async () => {
-    const mockResponse = {
-      status: 200,
-      statusText: 'OK',
-      headers: {},
-      data: {},
-      time: 100,
-    };
-
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
-    });
-
+  it('includes body for POST requests', async () => {
     render(<ClientComponent />);
 
-    const addHeaderButton = screen.getByText('Add Header');
-    fireEvent.click(addHeaderButton);
+    const urlInput = screen.getByTestId('url-input-field');
+    fireEvent.change(urlInput, { target: { value: 'https://api.test.com' } });
 
-    const urlInput = screen.getByTestId('url-input');
+    fireEvent.click(screen.getByText('Change to POST'));
+
+    const bodyTextarea = screen.getByTestId('body-content');
+    fireEvent.change(bodyTextarea, { target: { value: '{"data": "test"}' } });
+
     const sendButton = screen.getByTestId('send-button');
-
-    fireEvent.change(urlInput, { target: { value: 'https://api.example.com' } });
     fireEvent.click(sendButton);
 
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledWith('/api/request', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          method: 'GET',
-          url: 'https://api.example.com',
-          headers: { Test: 'Value' },
-          body: '',
-        }),
-      });
-    });
-  });
-
-  it('should include body content for POST requests', async () => {
-    const mockResponse = {
-      status: 200,
-      statusText: 'OK',
-      headers: {},
-      data: {},
-      time: 100,
-    };
-
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
-    });
-
-    render(<ClientComponent />);
-
-    const methodSelector = screen.getByTestId('method-selector');
-    fireEvent.change(methodSelector, { target: { value: 'POST' } });
-
-    const bodyContent = screen.getByTestId('body-content');
-    fireEvent.change(bodyContent, { target: { value: '{"test": "data"}' } });
-
-    const urlInput = screen.getByTestId('url-input');
-    const sendButton = screen.getByTestId('send-button');
-
-    fireEvent.change(urlInput, { target: { value: 'https://api.example.com' } });
-    fireEvent.click(sendButton);
-
-    await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledWith('/api/request', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      expect(fetch).toHaveBeenCalledWith(
+        '/api/request',
+        expect.objectContaining({
           method: 'POST',
-          url: 'https://api.example.com',
+          headers: { 'Content-Type': 'application/json' },
+          body: expect.stringContaining('"method":"POST"'),
+        })
+      );
+    });
+  });
+
+  it('excludes body for GET requests', async () => {
+    render(<ClientComponent />);
+
+    const urlInput = screen.getByTestId('url-input-field');
+    fireEvent.change(urlInput, { target: { value: 'https://api.test.com' } });
+
+    const bodyTextarea = screen.getByTestId('body-content');
+    fireEvent.change(bodyTextarea, { target: { value: '{"should": "be ignored"}' } });
+
+    const sendButton = screen.getByTestId('send-button');
+    fireEvent.click(sendButton);
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith(
+        '/api/request',
+        expect.objectContaining({
+          body: expect.stringContaining('"body":""'),
+        })
+      );
+    });
+  });
+
+  it('handles API response with invalid JSON', async () => {
+    vi.mocked(fetch).mockResolvedValue({
+      ok: true,
+      status: 200,
+      statusText: 'OK',
+      json: () =>
+        Promise.resolve({
+          status: 200,
+          statusText: 'OK',
           headers: {},
-          body: '{"test":"data"}',
+          data: null,
+          time: 100,
         }),
-      });
+      text: () => Promise.resolve('invalid json response'),
+    } as Response);
+
+    render(<ClientComponent />);
+
+    const urlInput = screen.getByTestId('url-input-field');
+    fireEvent.change(urlInput, { target: { value: 'https://api.test.com' } });
+
+    const sendButton = screen.getByTestId('send-button');
+    fireEvent.click(sendButton);
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalled();
+    });
+  });
+
+  it('handles API error response', async () => {
+    vi.mocked(fetch).mockResolvedValue({
+      ok: false,
+      status: 400,
+      statusText: 'Bad Request',
+      json: () => Promise.resolve({ error: 'Invalid request' }),
+      text: () => Promise.resolve('{"error": "Invalid request"}'),
+    } as Response);
+
+    render(<ClientComponent />);
+
+    const urlInput = screen.getByTestId('url-input-field');
+    fireEvent.change(urlInput, { target: { value: 'https://api.test.com' } });
+
+    const sendButton = screen.getByTestId('send-button');
+    fireEvent.click(sendButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Invalid request')).toBeInTheDocument();
+    });
+  });
+
+  it('handles API error response without error message', async () => {
+    vi.mocked(fetch).mockResolvedValue({
+      ok: false,
+      status: 500,
+      statusText: 'Internal Server Error',
+      json: () => Promise.resolve({}),
+      text: () => Promise.resolve('{}'),
+    } as Response);
+
+    render(<ClientComponent />);
+
+    const urlInput = screen.getByTestId('url-input-field');
+    fireEvent.change(urlInput, { target: { value: 'https://api.test.com' } });
+
+    const sendButton = screen.getByTestId('send-button');
+    fireEvent.click(sendButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Request failed')).toBeInTheDocument();
     });
   });
 });

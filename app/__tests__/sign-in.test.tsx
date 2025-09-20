@@ -25,13 +25,4 @@ describe('Sign In Page', () => {
 
     expect(screen.getByText(/Welcome back! Please sign in to your account/)).toBeInTheDocument();
   });
-
-  it('renders placeholder content', () => {
-    render(<SignIn />);
-
-    // expect(screen.getByText(/Sign in form will be implemented here/)).toBeInTheDocument();
-    // expect(
-    //   screen.getByText(/This is a placeholder page for the sign-in route/)
-    // ).toBeInTheDocument();
-  });
 });
