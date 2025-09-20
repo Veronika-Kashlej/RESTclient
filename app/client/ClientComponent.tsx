@@ -326,7 +326,7 @@ export default function ClientComponent() {
             <div className="response-headers">
               <h3>Headers</h3>
               <div className="headers-list">
-                {Object.entries(response.headers).map(([key, value]) => (
+                {Object.entries(response.headers || {}).map(([key, value]) => (
                   <div key={key} className="header-item">
                     <span className="header-key">{key}:</span>
                     <span className="header-value">{value}</span>
