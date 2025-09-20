@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import rsLogo from '../../assets/rss-logo.svg';
 import Image from 'next/image';
 import Navigation from '../Navigation';
-import type { Header } from '@/types/interfaces';
+import type { Header as HeaderType } from '@/types/interfaces';
 
-const Header = (props: Header) => {
+const Header = (props: HeaderType) => {
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header data-testid="header" className={props.className}>
+    <header data-testid="header" className={`${props.className} ${isSticky ? 'sticky' : ''}`}>
       <Link href="/">
         <Image src={rsLogo} alt="RSS Logo" width={80} height={80} priority />
       </Link>

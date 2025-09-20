@@ -1,45 +1,55 @@
-@use '../../utils/styles/general/vars.scss' as *;
-@use '../../utils/styles/mixins/_adaptive-properties.sass' as *;
+@use '../../utils/styles/general/vars.scss' as *
+@use '../../utils/styles/mixins/_adaptive-properties.sass' as *
 
 .header
-  display: flex
-  justify-content: space-between
-  align-items: center
-  padding: aCalc(16) aCalc(80)
-  border-top: aCalc(2) solid #fc8803
-  box-shadow: 0 aCalc(6) aCalc(6) rgba(0, 0, 0, 0.2)
-  border-radius: aCalc(2)
   position: sticky
-  background-color: #ffffff
-  z-index: 1
   top: 0
-  transition: padding .3s, background-color .3s
-  +mob($sm)
+  z-index: 1000
+  display: flex
+  align-items: center
+  justify-content: space-between
+  padding: 20px 80px
+  background: rgba(255, 255, 255, 0.98)
+  backdrop-filter: blur(20px)
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1)
+  transition: all 0.3s ease
+
+  &.sticky
+    padding: 10px 80px
+    background: rgba(255, 255, 255, 0.95)
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1)
+
+  a:first-child
+    transition: transform 0.3s ease
+    &:hover
+      transform: scale(1.05)
+
+  img
+    width: 50px
+    height: 50px
+    transition: all 0.3s ease
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))
+
++mob($sm)
+  .header
+    padding: 16px 20px
     flex-direction: column
-    gap: 8px
-    padding: 16px
-  &__btns 
-    display: flex
-    gap: aCalc(12)
-    +mob($sm)
+    gap: 16px
+
+    &.sticky
+      padding: 12px 20px
+
+    img
+      width: 60px
+      height: 60px
+
+    .header__btns
       flex-direction: column
-      gap: 8px
+      gap: 12px
       width: 100%
-  img, svg, button 
-    transition: transform .3s, background-color .3s, color .3s
-  svg, img 
-    width: aCalc(80)
-    height: aCalc(80)
-    object-fit: cover
-    +mob($sm)
-      width: 50px
-      height: 50px
-  &._active 
-    padding: aCalc(9) aCalc(40)
-    background-color: #b5ebf7
-    img, svg, button 
-      transform: scale(0.8)
-    button 
-      background-color: #000000
-      &:hover 
-        color: #fc8803
+
+    .btn-primary
+      width: 100%
+      text-align: center
+      padding: 12px 20px
+      font-size: 14px

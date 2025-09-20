@@ -1,191 +1,244 @@
 .client-page-wrapper
   width: 100%
-  max-width: 100%
-  display: block
-  justify-content: stretch
-  align-items: stretch
+  min-height: 100vh
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)
   padding: 0
-  overflow: visible
 
 .client-page
-  max-width: 1200px
+  max-width: 1400px
   width: 100%
-  overflow-x: auto
-  display: flex
-  flex-direction: column
-  align-items: stretch
-  padding: 0 20px
-  box-sizing: border-box
   margin: 0 auto
+  padding: 40px 24px
+  box-sizing: border-box
 
   h1
-    width: 100%
-    text-align: left
-    margin-bottom: 8px
+    font-size: 3rem
+    font-weight: 800
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%)
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+    background-clip: text
+    margin-bottom: 12px
+    text-align: center
 
   .h2
-    width: 100%
-    text-align: left
-    margin-bottom: 0
+    font-size: 1.25rem
+    color: #64748b
+    text-align: center
+    margin-bottom: 40px
+    font-weight: 400
 
 .client-interface
-  margin-top: 20px
-  padding: 20px
-  border: 1px solid #e1e5e9
-  border-radius: 8px
-  background: #f8f9fa
-  min-width: 100%
-  width: 100%
-  max-width: 100%
-  box-sizing: border-box
-  overflow-x: auto
+  background: white
+  border-radius: 20px
+  padding: 32px
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1)
+  backdrop-filter: blur(10px)
+  border: 1px solid rgba(255, 255, 255, 0.2)
+  margin-bottom: 32px
 
   &__method
-    margin-bottom: 16px
-    width: 100%
+    margin-bottom: 24px
 
   &__label
     display: block
-    margin-bottom: 8px
+    margin-bottom: 12px
     font-weight: 600
-    color: #333
-    font-size: 14px
-    width: 100%
+    color: #1e293b
+    font-size: 16px
 
   &__send
-    margin-top: 20px
+    margin-top: 32px
     text-align: center
-    width: 100%
 
   &__send-btn
-    background-color: #007bff
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%)
     color: white
     border: none
-    padding: 12px 24px
-    border-radius: 6px
-    font-size: 16px
+    padding: 16px 32px
+    border-radius: 12px
+    font-size: 18px
     font-weight: 600
     cursor: pointer
-    transition: background-color 0.2s ease
+    transition: all 0.3s ease
+    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3)
+    position: relative
+    overflow: hidden
+
+    &::before
+      content: ''
+      position: absolute
+      top: 0
+      left: -100%
+      width: 100%
+      height: 100%
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)
+      transition: left 0.5s ease
 
     &:hover:not(:disabled)
-      background-color: #0056b3
+      transform: translateY(-2px)
+      box-shadow: 0 12px 30px rgba(0, 123, 255, 0.4)
+
+      &::before
+        left: 100%
+
+    &:active:not(:disabled)
+      transform: translateY(0)
+      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3)
 
     &:disabled
-      background-color: #6c757d
+      background: #94a3b8
       cursor: not-allowed
+      box-shadow: none
 
 .response-section
-  margin-top: 20px
-  padding: 20px
-  border: 1px solid #e0e0e0
-  border-radius: 8px
-  background: #f8f9fa
-  min-width: 100%
-  width: 100%
-  box-sizing: border-box
+  background: white
+  border-radius: 20px
+  padding: 32px
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1)
+  backdrop-filter: blur(10px)
+  border: 1px solid rgba(255, 255, 255, 0.2)
+  margin-bottom: 24px
 
   h2
-    margin: 0 0 16px 0
-    color: #333
-    font-size: 18px
+    font-size: 1.75rem
+    font-weight: 700
+    color: #1e293b
+    margin-bottom: 24px
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%)
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+    background-clip: text
 
   &--error
-    background-color: #f8d7da
-    border-color: #f5c6cb
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)
+    border: 1px solid #fca5a5
 
     h2
-      color: #721c24
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)
+      -webkit-background-clip: text
+      -webkit-text-fill-color: transparent
+      background-clip: text
 
     p
-      color: #721c24
-      margin: 0
+      color: #dc2626
+      font-weight: 500
 
 .response-status
   display: flex
   justify-content: space-between
   align-items: center
-  margin-bottom: 16px
+  margin-bottom: 24px
+  padding: 16px
+  background: #f8fafc
+  border-radius: 12px
 
 .status-code
-  font-weight: bold
-  font-size: 18px
+  font-weight: 700
+  font-size: 1.25rem
+  padding: 8px 16px
+  border-radius: 8px
 
   &.success
-    color: #28a745
+    background: #10b981
+    color: white
 
   &.error
-    color: #dc3545
+    background: #ef4444
+    color: white
 
 .response-time
-  color: #666
+  color: #64748b
   font-size: 14px
+  font-weight: 500
 
 .response-headers
-  margin-bottom: 20px
+  margin-bottom: 24px
 
   h3
-    margin: 0 0 12px 0
-    color: #555
-    font-size: 16px
+    font-size: 1.25rem
+    font-weight: 600
+    color: #1e293b
+    margin-bottom: 16px
 
 .headers-list
-  background-color: #fff
-  border: 1px solid #e0e0e0
-  border-radius: 4px
-  padding: 12px
-  min-width: 0
-  width: 100%
-  box-sizing: border-box
+  background: #f8fafc
+  border: 1px solid #e2e8f0
+  border-radius: 12px
+  padding: 20px
+  max-height: 300px
+  overflow-y: auto
 
 .header-item
   display: flex
-  margin-bottom: 8px
-  font-family: monospace
+  margin-bottom: 12px
+  font-family: 'Fira Code', 'Monaco', 'Cascadia Code', monospace
   font-size: 14px
-  min-width: 0
-  width: 100%
+  padding: 12px
+  background: white
+  border-radius: 8px
+  border: 1px solid #e2e8f0
+  transition: all 0.2s ease
+
+  &:hover
+    border-color: #007bff
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1)
 
   &:last-child
     margin-bottom: 0
 
 .header-key
-  font-weight: bold
-  margin-right: 8px
-  min-width: 150px
-  max-width: 200px
-  color: #333
+  font-weight: 600
+  margin-right: 12px
+  min-width: 180px
+  color: #1e40af
   flex-shrink: 0
 
 .header-value
-  color: #666
+  color: #475569
   word-break: break-word
-  overflow-wrap: break-word
-  min-width: 0
   flex: 1
 
 .response-body
   h3
-    margin: 0 0 12px 0
-    color: #555
-    font-size: 16px
+    font-size: 1.25rem
+    font-weight: 600
+    color: #1e293b
+    margin-bottom: 16px
 
 .response-body-content
-  background-color: #fff
-  border: 1px solid #e0e0e0
-  border-radius: 4px
-  padding: 12px
-  margin: 0
-  white-space: pre-wrap
-  word-wrap: break-word
-  word-break: break-word
-  overflow-wrap: break-word
-  font-family: monospace
+  background: #1e293b
+  color: #e2e8f0
+  border-radius: 12px
+  padding: 24px
   font-size: 14px
-  line-height: 1.4
+  line-height: 1.6
   max-height: 400px
   overflow-y: auto
-  overflow-x: auto
-  min-width: 0
-  width: 100%
-  box-sizing: border-box
+  border: 1px solid #334155
+
+  &::-webkit-scrollbar
+    width: 8px
+
+  &::-webkit-scrollbar-track
+    background: #334155
+    border-radius: 4px
+
+  &::-webkit-scrollbar-thumb
+    background: #64748b
+    border-radius: 4px
+
+    &:hover
+      background: #94a3b8
+
+@keyframes slideIn
+  from
+    opacity: 0
+    transform: translateY(20px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+.client-interface,
+.response-section
+  animation: slideIn 0.6s ease

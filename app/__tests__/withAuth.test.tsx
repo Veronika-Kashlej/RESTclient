@@ -89,7 +89,7 @@ describe('withAuth HOC', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Redirecting to sign in...')).toBeInTheDocument();
-      expect(mockPush).toHaveBeenCalledWith('/sign-in');
+      expect(mockPush).toHaveBeenCalledWith('/');
     });
   });
 

@@ -1,43 +1,78 @@
-@use '../../utils/styles/general/vars.scss' as *;
-@use '../../utils/styles/mixins/_adaptive-properties.sass' as *;
+.header__btns
+    display: flex
+    gap: 16px
+    align-items: center
+
+.btn-primary
+    padding: 12px 24px
+    border-radius: 8px
+    font-size: 16px
+    font-weight: 500
+    text-decoration: none
+    transition: all 0.3s ease
+    background: #0056b3
+    color: white
+    border: none
+    cursor: pointer
+
+    &:hover
+        background: #007bff
+        transform: translateY(-2px)
+        box-shadow: 0 4px 12px #0056b3
+
+    &:active
+        transform: translateY(0)
 
 .navigation
-  display: flex
-  align-items: center
-  
-  &__list
     display: flex
-    list-style: none
-    margin: 0
-    padding: 0
-    gap: aCalc(20)
-    +mob($sm)
-      gap: 16px
-      flex-direction: column
-      width: 100%
-  
-  &__item
-    margin: 0
-    padding: 0
-  
-  &__link
-    color: inherit
-    text-decoration: none
-    font-size: aCalc(16)
-    font-weight: 500
-    padding: aCalc(8) aCalc(12)
-    border-radius: aCalc(4)
-    transition: background-color .3s, color .3s
-    +mob($sm)
-      font-size: 16px
-      padding: 8px 12px
-      display: block
-      width: 100%
-      text-align: center
-    
-    &:hover
-      background-color: rgba(252, 136, 3, 0.1)
-      color: #fc8803
-    
-    &:active
-      background-color: rgba(252, 136, 3, 0.2)
+    align-items: center
+
+    &__list
+        display: flex
+        list-style: none
+        margin: 0
+        padding: 0
+        gap: 4px
+
+    &__item
+        position: relative
+
+    &__link
+        position: relative
+        display: flex
+        align-items: center
+        padding: 16px 24px
+        text-decoration: none
+        color: #1e293b
+        font-weight: 500
+        font-size: 16px
+        border-radius: 8px
+        transition: all 0.3s ease
+        background: transparent
+
+        &::after
+            content: ''
+            position: absolute
+            bottom: 0
+            left: 50%
+            width: 0
+            height: 3px
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%)
+            transition: all 0.3s ease
+            transform: translateX(-50%)
+            border-radius: 2px 2px 0 0
+
+        &:hover
+            color: #007bff
+
+            &::after
+                width: 80%
+
+        &[aria-current="page"]
+            color: #007bff
+            background: rgba(0, 123, 255, 0.1)
+            font-weight: 600
+
+            &::after
+                width: 80%
+                background: linear-gradient(135deg, #007bff 0%, #0056b3 100%)

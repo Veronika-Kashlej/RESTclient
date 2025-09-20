@@ -175,7 +175,7 @@ describe('AuthProvider', () => {
 
     await waitFor(() => {
       expect(mockFirebaseSignOut).toHaveBeenCalled();
-      expect(mockPush).toHaveBeenCalledWith('/sign-in');
+      expect(mockPush).toHaveBeenCalledWith('/');
     });
   });
 

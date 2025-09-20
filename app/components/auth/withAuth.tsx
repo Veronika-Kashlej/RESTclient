@@ -16,7 +16,7 @@ export default function withAuth<P extends object>(WrappedComponent: React.Compo
         if (currentUser) {
           setUser(currentUser);
         } else {
-          router.push('/sign-in');
+          router.push('/');
         }
         setIsLoading(false);
       });
