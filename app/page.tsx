@@ -6,6 +6,7 @@ import { useAuth } from './components/authContext/authContext';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase/firebase';
 import styles from './page.module.scss';
+import Link from 'next/link';
 
 export default function Home() {
   const router = useRouter();
@@ -16,7 +17,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/sign-up');
+      router.push('/');
     }
   }, [user, authLoading, router]);
 
@@ -43,23 +44,36 @@ export default function Home() {
     fetchMessage();
   }, [user]);
 
-  if (authLoading) return <p>Loading...</p>;
+  if (authLoading) return <p className="loading-text">Loading...</p>;
 
-  if (!user) return null;
+  if (!user)
+    return (
+      <>
+        <h1 className="title">Welcome!</h1>
+        <div className="header__btns">
+          <Link href="/sign-in" className="btn-primary">
+            Sign in
+          </Link>
+          <Link href="/sign-up" className="btn-primary">
+            Sign up
+          </Link>
+        </div>
+      </>
+    );
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p className="loading-text">Loading...</p>;
 
-  if (authError) return <p>Error: {authError}</p>;
+  if (authError) return <p className="error-text">Error: {authError}</p>;
 
-  if (error) return <p>Error: {error}</p>;
+  if (error) return <p className="error-text">Error: {error}</p>;
 
   return (
     <div className={styles['home-page']}>
-      <p>Postman clone is here</p>
-      <p>Welcome, {user.email}</p>
+      <h1 className="title">Postman clone is here</h1>
+      <h2>Welcome back, {user.email}</h2>
       <div className="h3">
         A simple example query to Firebase works and was placed here:
-        <p>{message}</p>
+        <p> {message}</p>
       </div>
       <button className="signup-btn" onClick={() => signOut()}>
         Logout
