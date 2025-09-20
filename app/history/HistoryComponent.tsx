@@ -3,7 +3,16 @@
 import { useEffect, useState } from 'react';
 import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
 
+import { useRouter } from 'next/navigation';
+
 import { db } from '../firebase/firebase';
+
+type HeaderItem = {
+  key: string;
+  value: string;
+};
+
+type BodyType = 'json' | 'text' | 'form-data' | 'none';
 
 type RequestRecord = {
   id: string;
@@ -14,12 +23,17 @@ type RequestRecord = {
   requestSizeBytes: number;
   responseSizeBytes: number;
   timestamp: Timestamp;
+  headers: Record<string, string>;
+  bodyType: BodyType;
+  bodyContent: string;
 };
 
 export default function HistoryComponent() {
   const [requests, setRequests] = useState<RequestRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchRequests() {
@@ -55,8 +69,35 @@ export default function HistoryComponent() {
       {requests.length === 0 && <p>No requests found.</p>}
       <ul className="history-content">
         {requests.map(
-          ({ id, method, url, status, timingMs, requestSizeBytes, responseSizeBytes }) => (
-            <li key={id}>
+          ({
+            id,
+            method,
+            url,
+            status,
+            timingMs,
+            requestSizeBytes,
+            responseSizeBytes,
+            headers,
+            bodyContent,
+          }) => (
+            <li
+              key={id}
+              onClick={() => {
+                const params = new URLSearchParams();
+                params.set('method', method);
+                params.set('url', encodeURIComponent(url));
+                const requestHeaders: HeaderItem[] = [];
+                params.set('headers', encodeURIComponent(JSON.stringify(requestHeaders)));
+                params.set('bodyType', 'json');
+                params.set('bodyContent', encodeURIComponent(''));
+                params.set('responseStatus', status.toString());
+                params.set('responseHeaders', encodeURIComponent(JSON.stringify(headers || {})));
+                params.set('responseBody', encodeURIComponent(bodyContent || ''));
+                params.set('responseTime', timingMs.toString());
+                router.push(`/client?${params.toString()}`);
+              }}
+              style={{ cursor: 'pointer' }}
+            >
               <div className="history-el _method">
                 <div className="h3">method:</div>
                 <p className="h4">{method}</p>
@@ -68,6 +109,29 @@ export default function HistoryComponent() {
               <div className="history-el">
                 <div className="h3">status:</div>
                 <p className="h4">{status}</p>
+              </div>
+              <div className="history-el">
+                <div className="h3">response headers:</div>
+                <div className="h4">
+                  {headers && Object.entries(headers).length > 0 ? (
+                    Object.entries(headers).map(([key, value]) => (
+                      <div key={key} className="header-item">
+                        <span className="header-key">{key}:</span>
+                        <span className="header-value">{value}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <span className="header-value">(no headers)</span>
+                  )}
+                </div>
+              </div>
+              <div className="history-el">
+                <div className="h3">response body:</div>
+                <div className="h4 response-body-preview">
+                  {bodyContent && bodyContent.length > 100
+                    ? `${bodyContent.substring(0, 100)}...`
+                    : bodyContent || '(empty)'}
+                </div>
               </div>
               <div className="history-el">
                 <div className="h3">timingMs:</div>
