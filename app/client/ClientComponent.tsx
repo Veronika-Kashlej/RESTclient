@@ -14,6 +14,8 @@ import type { HttpMethod, HeaderItem, RequestState } from '../types/interfaces';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase/firebase';
 
+import { useSearchParams } from 'next/navigation';
+
 import './ClientComponent.sass';
 
 export default function ClientComponent() {
@@ -34,6 +36,8 @@ export default function ClientComponent() {
   const [isStateRestored, setIsStateRestored] = useState(false);
 
   const { variables } = useVariables();
+
+  const searchParams = useSearchParams();
 
   const requestState: RequestState = {
     method: selectedMethod,
@@ -89,6 +93,63 @@ export default function ClientComponent() {
   );
 
   useUrlSync(requestState, handleStateRestore);
+
+  useEffect(() => {
+    const method = searchParams.get('method');
+    const url = searchParams.get('url');
+    const headers = searchParams.get('headers');
+    const bodyType = searchParams.get('bodyType');
+    const bodyContent = searchParams.get('bodyContent');
+    const responseStatus = searchParams.get('responseStatus');
+    const responseHeaders = searchParams.get('responseHeaders');
+    const responseBody = searchParams.get('responseBody');
+    const responseTime = searchParams.get('responseTime');
+    if (
+      method ||
+      url ||
+      headers ||
+      bodyType ||
+      bodyContent ||
+      responseStatus ||
+      responseHeaders ||
+      responseBody ||
+      responseTime
+    ) {
+      if (method) setSelectedMethod(method as HttpMethod);
+      if (url) setUrl(decodeURIComponent(url));
+      if (headers) {
+        try {
+          setHeaders(JSON.parse(decodeURIComponent(headers)));
+        } catch {
+          console.warn('Invalid headers format');
+        }
+      }
+      if (bodyType) setBodyType(bodyType as BodyType);
+      if (bodyContent) setBodyContent(decodeURIComponent(bodyContent));
+      if (responseStatus || responseHeaders || responseBody || responseTime) {
+        try {
+          const responseData = {
+            status: responseStatus ? parseInt(responseStatus) : 0,
+            statusText: '',
+            headers: responseHeaders ? JSON.parse(decodeURIComponent(responseHeaders)) : {},
+            data: responseBody ? decodeURIComponent(responseBody) : null,
+            time: responseTime ? parseFloat(responseTime) : 0,
+          };
+          if (typeof responseData.data === 'string') {
+            try {
+              responseData.data = JSON.parse(responseData.data);
+            } catch {
+              console.warn('Response body is not valid JSON, keeping as string');
+            }
+          }
+          setResponse(responseData);
+        } catch (error) {
+          console.warn('Error parsing response data from history:', error);
+        }
+      }
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (isStateRestored && url.trim()) {
@@ -229,19 +290,29 @@ export default function ClientComponent() {
 
       const responseText = await apiResponse.text();
       const responseSize = new TextEncoder().encode(responseText).length;
+      const responseHeaders: Record<string, string> = {};
+      apiResponse.headers.forEach((value, key) => {
+        responseHeaders[key] = value;
+      });
 
       let data;
       try {
         data = JSON.parse(responseText);
       } catch {
-        data = null;
+        data = responseText;
       }
 
       if (!apiResponse.ok) {
         throw new Error(data?.error || 'Request failed');
       }
 
-      setResponse(data);
+      setResponse({
+        status: apiResponse.status,
+        statusText: apiResponse.statusText,
+        headers: responseHeaders,
+        data: data,
+        time: durationMs,
+      });
 
       await addDoc(collection(db, 'requests'), {
         method: selectedMethod,
@@ -250,6 +321,9 @@ export default function ClientComponent() {
         timingMs: durationMs,
         requestSizeBytes: requestSize,
         responseSizeBytes: responseSize,
+        headers: responseHeaders,
+        bodyType: 'json',
+        bodyContent: responseText,
         timestamp: serverTimestamp(),
       });
     } catch (err) {
