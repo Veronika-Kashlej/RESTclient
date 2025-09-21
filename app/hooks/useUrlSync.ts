@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useRef } from 'react';
-import type { RequestState } from '../utils/urlSync';
+import type { RequestState } from '../types/interfaces';
 import { getRequestStateFromUrl, updateUrlWithRequestState } from '../utils/urlSync';
 
 export function useUrlSync(

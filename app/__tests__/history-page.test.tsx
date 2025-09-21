@@ -50,7 +50,7 @@ vi.mock('./HistoryComponent', () => ({
   default: () => <div data-testid="history-component">History Component</div>,
 }));
 
-import HistoryPage from '../history/page';
+import HistoryPage from '../[locale]/history/page';
 
 describe('History Page', () => {
   it('should render with auth wrapper', () => {

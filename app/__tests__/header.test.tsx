@@ -2,6 +2,39 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import Header from '../components/header/header';
 
+vi.mock('next/navigation', () => ({
+  useParams: vi.fn(() => ({ locale: 'en' })),
+  usePathname: vi.fn(() => '/en'),
+  useRouter: vi.fn(() => ({ replace: vi.fn() })),
+}));
+
+vi.mock('react', async () => {
+  const actual = await vi.importActual('react');
+  return {
+    ...actual,
+    useTransition: vi.fn(() => [false, vi.fn()]),
+  };
+});
+
+vi.mock('next-intl', () => ({
+  useTranslations: vi.fn(() => (key: string) => {
+    const translations: Record<string, string> = {
+      signIn: 'Sign In',
+      signUp: 'Sign Up',
+      home: 'Home',
+      client: 'Client',
+      history: 'History',
+      variables: 'Variables',
+      select: 'Select Language',
+      english: 'English',
+      russian: 'Русский',
+      spanish: 'Español',
+    };
+    return translations[key] || key;
+  }),
+  useLocale: vi.fn(() => 'en'),
+}));
+
 vi.mock('next/link', () => ({
   default: ({
     href,
@@ -60,7 +93,7 @@ describe('Header Component', () => {
     expect(logo).toHaveAttribute('height', '80');
 
     const logoLink = logo.closest('a');
-    expect(logoLink).toHaveAttribute('href', '/');
+    expect(logoLink).toHaveAttribute('href', '/en');
   });
 
   it('should render Navigation component', () => {
@@ -74,25 +107,25 @@ describe('Header Component', () => {
   it('should render sign in button', () => {
     render(<Header className="test-header" />);
 
-    const signInButton = screen.getByText('Sign in');
+    const signInButton = screen.getByText('Sign In');
     expect(signInButton).toBeInTheDocument();
-    expect(signInButton.closest('a')).toHaveAttribute('href', '/sign-in');
+    expect(signInButton.closest('a')).toHaveAttribute('href', '/en/sign-in');
     expect(signInButton.closest('a')).toHaveClass('btn-primary');
   });
 
   it('should render sign up button', () => {
     render(<Header className="test-header" />);
 
-    const signUpButton = screen.getByText('Sign up');
+    const signUpButton = screen.getByText('Sign Up');
     expect(signUpButton).toBeInTheDocument();
-    expect(signUpButton.closest('a')).toHaveAttribute('href', '/sign-up');
+    expect(signUpButton.closest('a')).toHaveAttribute('href', '/en/sign-up');
     expect(signUpButton.closest('a')).toHaveClass('btn-primary');
   });
 
   it('should render header buttons container', () => {
     render(<Header className="test-header" />);
 
-    const buttonsContainer = screen.getByText('Sign in').closest('div');
+    const buttonsContainer = screen.getByText('Sign In').closest('div');
     expect(buttonsContainer).toHaveClass('header__btns');
   });
 
@@ -102,8 +135,8 @@ describe('Header Component', () => {
     expect(screen.getByTestId('header')).toBeInTheDocument();
     expect(screen.getByAltText('RSS Logo')).toBeInTheDocument();
     expect(screen.getByTestId('navigation')).toBeInTheDocument();
-    expect(screen.getByText('Sign in')).toBeInTheDocument();
-    expect(screen.getByText('Sign up')).toBeInTheDocument();
+    expect(screen.getByText('Sign In')).toBeInTheDocument();
+    expect(screen.getByText('Sign Up')).toBeInTheDocument();
   });
 
   it('should render header with custom className', () => {

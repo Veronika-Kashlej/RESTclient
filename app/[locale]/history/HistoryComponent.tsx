@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
-
 import { useRouter } from 'next/navigation';
-
-import { db } from '../firebase/firebase';
+import { useTranslations } from 'next-intl';
+import { db } from '../../firebase/firebase';
 
 type HeaderItem = {
   key: string;
@@ -29,6 +28,7 @@ type RequestRecord = {
 };
 
 export default function HistoryComponent() {
+  const t = useTranslations('history');
   const [requests, setRequests] = useState<RequestRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -50,7 +50,7 @@ export default function HistoryComponent() {
 
         setRequests(requestsData);
       } catch {
-        setError('Failed to load requests');
+        setError(t('errorLoading'));
       } finally {
         setLoading(false);
       }
@@ -59,14 +59,14 @@ export default function HistoryComponent() {
     fetchRequests();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>{t('loading')}</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
     <>
-      <h1>Request History</h1>
+      <h1>{t('title')}</h1>
       <p className="h2">View and manage your API request history.</p>
-      {requests.length === 0 && <p>No requests found.</p>}
+      {requests.length === 0 && <p>{t('noHistory')}</p>}
       <ul className="history-content">
         {requests.map(
           ({
@@ -149,10 +149,6 @@ export default function HistoryComponent() {
           )
         )}
       </ul>
-      <div className="h3">
-        <p>Request history interface will be implemented here.</p>
-        <p>This is a placeholder page for the history route.</p>
-      </div>
     </>
   );
 }

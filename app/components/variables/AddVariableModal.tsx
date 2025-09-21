@@ -1,7 +1,10 @@
+'use client';
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import type { AddVariableModalProps, VariableFormData } from '../../types/interfaces';
 
 export default function AddVariableModal({ isOpen, onClose, onAdd, error }: AddVariableModalProps) {
+  const t = useTranslations('variables');
   const [formData, setFormData] = useState<VariableFormData>({
     key: '',
     value: '',
@@ -21,12 +24,12 @@ export default function AddVariableModal({ isOpen, onClose, onAdd, error }: AddV
     e.preventDefault();
 
     if (!formData.key.trim()) {
-      setLocalError('Key is required');
+      setLocalError(t('keyRequired'));
       return;
     }
 
     if (!formData.value.trim()) {
-      setLocalError('Value is required');
+      setLocalError(t('valueRequired'));
       return;
     }
 
@@ -47,7 +50,7 @@ export default function AddVariableModal({ isOpen, onClose, onAdd, error }: AddV
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Add New Variable</h2>
+          <h2>{t('addNew')}</h2>
           <button className="modal-close" onClick={onClose}>
             ×
           </button>
@@ -59,7 +62,7 @@ export default function AddVariableModal({ isOpen, onClose, onAdd, error }: AddV
 
             <div className="form-group">
               <label htmlFor="key" className="form-label">
-                Key *
+                {t('name')} *
               </label>
               <input
                 id="key"
@@ -75,7 +78,7 @@ export default function AddVariableModal({ isOpen, onClose, onAdd, error }: AddV
 
             <div className="form-group">
               <label htmlFor="value" className="form-label">
-                Value *
+                {t('value')} *
               </label>
               <input
                 id="value"
@@ -90,7 +93,7 @@ export default function AddVariableModal({ isOpen, onClose, onAdd, error }: AddV
 
             <div className="form-group">
               <label htmlFor="description" className="form-label">
-                Description
+                {t('description')}
               </label>
               <input
                 id="description"
@@ -105,14 +108,14 @@ export default function AddVariableModal({ isOpen, onClose, onAdd, error }: AddV
 
           <div className="modal-footer">
             <button type="button" onClick={onClose} className="btn btn--secondary">
-              Cancel
+              {t('cancel')}
             </button>
             <button
               type="submit"
               className="btn btn--primary"
               disabled={!formData.key.trim() || !formData.value.trim()}
             >
-              Add Variable
+              {t('addVariable')}
             </button>
           </div>
         </form>

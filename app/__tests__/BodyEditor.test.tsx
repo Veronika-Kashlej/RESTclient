@@ -2,6 +2,18 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import BodyEditor from '../components/BodyEditor';
 
+vi.mock('next-intl', () => ({
+  useTranslations: vi.fn(() => (key: string) => {
+    const translations: Record<string, string> = {
+      json: 'JSON',
+      text: 'Text',
+      prettify: 'Prettify',
+      invalidJson: 'Invalid JSON format',
+    };
+    return translations[key] || key;
+  }),
+}));
+
 vi.mock('@monaco-editor/react', () => ({
   default: ({
     value,
@@ -148,7 +160,7 @@ describe('BodyEditor', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('body-editor-error')).toBeInTheDocument();
-      expect(screen.getByText('Cannot prettify invalid JSON')).toBeInTheDocument();
+      expect(screen.getByText('Invalid JSON format')).toBeInTheDocument();
     });
   });
 

@@ -2,14 +2,31 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import SignIn from '../sign-in/page';
+import SignIn from '../[locale]/sign-in/page';
 
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  useParams: vi.fn(() => ({ locale: 'en' })),
 }));
 
 vi.mock('firebase/auth', () => ({
   signInWithEmailAndPassword: vi.fn(),
+}));
+
+vi.mock('next-intl', () => ({
+  useTranslations: vi.fn(() => (key: string) => {
+    const translations: Record<string, string> = {
+      signIn: 'Sign In',
+      welcomeBack: 'Welcome back! Please sign in to your account.',
+      email: 'Email',
+      password: 'Password',
+      showPassword: 'Show Password',
+      loginButton: 'Login',
+      loading: 'Loading...',
+      invalidCredentials: 'Invalid credentials. Please try again.',
+    };
+    return translations[key] || key;
+  }),
 }));
 
 vi.mock('../firebase/firebase', () => ({
@@ -39,7 +56,7 @@ describe('SignIn Page', () => {
       expect(screen.getByText('Welcome back! Please sign in to your account.')).toBeInTheDocument();
       expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
       expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
-      expect(screen.getByText('Show password')).toBeInTheDocument();
+      expect(screen.getByText('Show Password')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument();
     });
 
@@ -168,7 +185,7 @@ describe('SignIn Page', () => {
       if (form) fireEvent.submit(form);
 
       await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith('/');
+        expect(mockPush).toHaveBeenCalledWith('/en');
       });
     });
 
@@ -404,7 +421,7 @@ describe('SignIn Page', () => {
           'user@example.com',
           'securepassword'
         );
-        expect(mockPush).toHaveBeenCalledWith('/');
+        expect(mockPush).toHaveBeenCalledWith('/en');
       });
     });
 
@@ -432,7 +449,7 @@ describe('SignIn Page', () => {
       if (form) fireEvent.submit(form);
 
       await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith('/');
+        expect(mockPush).toHaveBeenCalledWith('/en');
         expect(screen.queryByText('Wrong password')).not.toBeInTheDocument();
       });
     });

@@ -1,16 +1,31 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import VariablesComponent from '../variables/VariablesComponent';
+import VariablesComponent from '../[locale]/variables/VariablesComponent';
 import { useVariables } from '../hooks/useVariables';
-import type { Variable } from '../types/interfaces';
+import type {
+  MockAddVariableModalProps,
+  MockVariableItemProps,
+  Variable,
+} from '../types/interfaces';
 
 vi.mock('../hooks/useVariables');
 
-interface MockVariableItemProps {
-  variable: Variable;
-  onUpdate: (id: string, data: { key: string; value: string; description: string }) => void;
-  onDelete: (id: string) => void;
-}
+vi.mock('next-intl', () => ({
+  useTranslations: vi.fn(() => (key: string) => {
+    const translations: Record<string, string> = {
+      title: 'Environment Variables',
+      name: 'Key',
+      value: 'Value',
+      description: 'Description',
+      actions: 'Actions',
+      addVariable: 'Add Variable',
+      noVariables: 'No variables yet',
+      createFirst: 'Create your first variable to get started.',
+      loading: 'Loading variables...',
+    };
+    return translations[key] || key;
+  }),
+}));
 
 vi.mock('../components/variables/VariableItem', () => ({
   default: ({ variable, onUpdate, onDelete }: MockVariableItemProps) => (
@@ -31,13 +46,6 @@ vi.mock('../components/variables/VariableItem', () => ({
     </tr>
   ),
 }));
-
-interface MockAddVariableModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onAdd: (data: { key: string; value: string; description: string }) => void;
-  error?: string | null;
-}
 
 vi.mock('../components/variables/AddVariableModal', () => ({
   default: ({ isOpen, onClose, onAdd, error }: MockAddVariableModalProps) =>
@@ -127,13 +135,11 @@ describe('VariablesComponent', () => {
       render(<VariablesComponent />);
 
       expect(screen.getByText('No variables yet')).toBeInTheDocument();
-      expect(
-        screen.getByText('Add your first environment variable to get started.')
-      ).toBeInTheDocument();
-      expect(screen.getByText('Add Your First Variable')).toBeInTheDocument();
+      expect(screen.getByText('Create your first variable to get started.')).toBeInTheDocument();
+      expect(screen.getAllByText('Add Variable')).toHaveLength(2);
     });
 
-    it('opens add modal when "Add Your First Variable" button is clicked', () => {
+    it('opens add modal when empty state "Add Variable" button is clicked', () => {
       vi.mocked(useVariables).mockReturnValue({
         ...mockUseVariables,
         variables: [],
@@ -141,7 +147,8 @@ describe('VariablesComponent', () => {
 
       render(<VariablesComponent />);
 
-      fireEvent.click(screen.getByText('Add Your First Variable'));
+      const addButtons = screen.getAllByText('Add Variable');
+      fireEvent.click(addButtons[1]);
       expect(screen.getByTestId('add-variable-modal')).toBeInTheDocument();
     });
   });
