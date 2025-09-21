@@ -68,6 +68,8 @@
   },
   "history": {
     "title": "Request History",
+    "loading": "Loading history...",
+    "errorLoading": "Error loading history",
     "noHistory": "No requests made yet",
     "makeFirst": "Make your first request to see it here",
     "method": "Method",

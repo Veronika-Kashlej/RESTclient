@@ -68,6 +68,8 @@
   },
   "history": {
     "title": "Historial de solicitudes",
+    "loading": "Cargando historial...",
+    "errorLoading": "Error al cargar el historial",
     "noHistory": "Aún no se han realizado solicitudes",
     "makeFirst": "Realiza tu primera solicitud para verla aquí",
     "method": "Método",
