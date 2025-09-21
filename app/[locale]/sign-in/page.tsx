@@ -41,7 +41,7 @@ export default function SignIn() {
   return (
     <>
       <h1>{t('signIn')}</h1>
-      <p className="h2">Welcome back! Please sign in to your account.</p>
+      <p className="h2">{t('welcomeBackMessage')}</p>
       <div className="h3 auth-wrapper">
         <form onSubmit={handleLogin}>
           <input

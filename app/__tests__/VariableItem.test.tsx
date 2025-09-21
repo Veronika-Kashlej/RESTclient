@@ -3,6 +3,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import VariableItem from '../components/variables/VariableItem';
 import type { Variable } from '../types/interfaces';
 
+vi.mock('next-intl', () => ({
+  useTranslations: vi.fn(() => (key: string) => key),
+}));
+
 const mockVariable: Variable = {
   id: '1',
   key: 'API_URL',
@@ -33,8 +37,8 @@ describe('VariableItem', () => {
       expect(screen.getByText('API_URL')).toBeInTheDocument();
       expect(screen.getByText('https://api.example.com')).toBeInTheDocument();
       expect(screen.getByText('API base URL')).toBeInTheDocument();
-      expect(screen.getByText('Edit')).toBeInTheDocument();
-      expect(screen.getByText('Delete')).toBeInTheDocument();
+      expect(screen.getByText('edit')).toBeInTheDocument();
+      expect(screen.getByText('delete')).toBeInTheDocument();
     });
 
     it('renders dash when description is empty', () => {
@@ -80,7 +84,7 @@ describe('VariableItem', () => {
         </table>
       );
 
-      fireEvent.click(screen.getByText('Delete'));
+      fireEvent.click(screen.getByText('delete'));
       expect(mockOnDelete).toHaveBeenCalledWith('1');
     });
 
@@ -93,7 +97,7 @@ describe('VariableItem', () => {
         </table>
       );
 
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('edit'));
 
       expect(screen.getByDisplayValue('API_URL')).toBeInTheDocument();
       expect(screen.getByDisplayValue('https://api.example.com')).toBeInTheDocument();
@@ -112,7 +116,7 @@ describe('VariableItem', () => {
           </tbody>
         </table>
       );
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('edit'));
     });
 
     it('renders input fields with current values', () => {
@@ -259,7 +263,7 @@ describe('VariableItem', () => {
         </table>
       );
 
-      fireEvent.click(screen.getByText('Edit'));
+      fireEvent.click(screen.getByText('edit'));
 
       const keyInput = screen.getByDisplayValue('API_URL');
       const valueInput = screen.getByDisplayValue('https://api.example.com');

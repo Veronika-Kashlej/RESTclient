@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import type { Variable, VariableFormData } from '../../types/interfaces';
 
 interface VariableItemProps {
@@ -8,6 +9,7 @@ interface VariableItemProps {
 }
 
 export default function VariableItem({ variable, onUpdate, onDelete }: VariableItemProps) {
+  const t = useTranslations('variables');
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<VariableFormData>({
     key: variable.key,
@@ -99,13 +101,13 @@ export default function VariableItem({ variable, onUpdate, onDelete }: VariableI
       <td>
         <div className="variable-actions">
           <button onClick={() => setIsEditing(true)} className="variable-btn variable-btn--edit">
-            Edit
+            {t('edit')}
           </button>
           <button
             onClick={() => onDelete(variable.id)}
             className="variable-btn variable-btn--delete"
           >
-            Delete
+            {t('delete')}
           </button>
         </div>
       </td>

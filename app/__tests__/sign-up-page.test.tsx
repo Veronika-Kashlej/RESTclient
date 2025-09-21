@@ -17,10 +17,12 @@ vi.mock('next-intl', () => ({
     const translations: Record<string, string> = {
       signUp: 'Sign Up',
       createAccount: 'Create your account to get started.',
+      createAccountMessage: 'Create your account to get started.',
       email: 'Email',
       password: 'Password',
       confirmPassword: 'Confirm Password',
       showPassword: 'Show Password',
+      hidePassword: 'Hide Password',
       registerButton: 'Register',
       loading: 'Loading...',
       emailInUse: 'Email is already in use. Please try a different email.',

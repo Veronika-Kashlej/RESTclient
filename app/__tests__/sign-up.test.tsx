@@ -15,7 +15,21 @@ vi.mock('next/navigation', () => ({
 }));
 
 vi.mock('next-intl', () => ({
-  useTranslations: vi.fn(() => (key: string) => key),
+  useTranslations: vi.fn(() => (key: string) => {
+    const translations: Record<string, string> = {
+      signUp: 'Sign Up',
+      createAccountMessage: 'Create your account to get started.',
+      email: 'Email',
+      password: 'Password',
+      confirmPassword: 'Confirm Password',
+      showPassword: 'Show Password',
+      hidePassword: 'Hide Password',
+      registerButton: 'Register',
+      loading: 'Loading...',
+      passwordsDoNotMatch: 'Passwords do not match',
+    };
+    return translations[key] || key;
+  }),
 }));
 
 vi.mock('../components/authContext/authContext', () => ({
@@ -31,7 +45,7 @@ describe('Sign Up Page', () => {
   it('renders sign up title', () => {
     render(<SignUp />);
 
-    expect(screen.getByText('signUp')).toBeInTheDocument();
+    expect(screen.getByText('Sign Up')).toBeInTheDocument();
   });
 
   it('renders create account message', () => {

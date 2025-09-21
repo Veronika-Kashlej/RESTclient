@@ -7,21 +7,21 @@ function About() {
   const teamMembers = [
     {
       id: 1,
-      name: 'Veronika',
+      name: t('veronika'),
       role: t('teamLead'),
       bio: t('veronikaBio'),
       github: 'https://github.com/Veronika-Kashlej',
     },
     {
       id: 2,
-      name: 'Vlad',
+      name: t('vlad'),
       role: t('frontendDeveloper'),
       bio: t('vladBio'),
       github: 'https://github.com/Vlad-Vasinev',
     },
     {
       id: 3,
-      name: 'Kirill',
+      name: t('kirill'),
       role: t('frontendDeveloper'),
       bio: t('kirillBio'),
       github: 'https://github.com/KirrBrest',

@@ -50,7 +50,7 @@ export default function SignUp() {
   return (
     <div className="auth-page">
       <h1>{t('signUp')}</h1>
-      <p className="h2">Create your account to get started.</p>
+      <p className="h2">{t('createAccountMessage')}</p>
       <div className="h3 auth-wrapper">
         <form className="sign-upForm" onSubmit={handleRegister}>
           <input

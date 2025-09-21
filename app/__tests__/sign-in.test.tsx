@@ -15,7 +15,19 @@ vi.mock('next/navigation', () => ({
 }));
 
 vi.mock('next-intl', () => ({
-  useTranslations: vi.fn(() => (key: string) => key),
+  useTranslations: vi.fn(() => (key: string) => {
+    const translations: Record<string, string> = {
+      signIn: 'Sign In',
+      welcomeBackMessage: 'Welcome back! Please sign in to your account.',
+      email: 'Email',
+      password: 'Password',
+      showPassword: 'Show Password',
+      hidePassword: 'Hide Password',
+      loginButton: 'Login',
+      loading: 'Loading...',
+    };
+    return translations[key] || key;
+  }),
 }));
 
 vi.mock('../components/authContext/authContext', () => ({
@@ -31,7 +43,7 @@ describe('Sign In Page', () => {
   it('renders sign in title', () => {
     render(<SignIn />);
 
-    expect(screen.getByText('signIn')).toBeInTheDocument();
+    expect(screen.getByText('Sign In')).toBeInTheDocument();
   });
 
   it('renders welcome message', () => {

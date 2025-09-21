@@ -13,14 +13,15 @@ vi.mock('../hooks/useVariables');
 vi.mock('next-intl', () => ({
   useTranslations: vi.fn(() => (key: string) => {
     const translations: Record<string, string> = {
-      title: 'Environment Variables',
-      name: 'Key',
+      title: 'Variables',
+      description: 'Manage your environment variables and configurations',
+      descriptionColumn: 'Description',
+      name: 'Name',
       value: 'Value',
-      description: 'Description',
       actions: 'Actions',
       addVariable: 'Add Variable',
-      noVariables: 'No variables yet',
-      createFirst: 'Create your first variable to get started.',
+      noVariables: 'No variables created yet',
+      createFirst: 'Create your first variable to use in requests',
       loading: 'Loading variables...',
     };
     return translations[key] || key;
@@ -117,9 +118,9 @@ describe('VariablesComponent', () => {
 
       render(<VariablesComponent />);
 
-      expect(screen.getByText('Environment Variables')).toBeInTheDocument();
+      expect(screen.getByText('Variables')).toBeInTheDocument();
       expect(
-        screen.getByText('Manage your environment variables and configurations.')
+        screen.getByText('Manage your environment variables and configurations')
       ).toBeInTheDocument();
       expect(screen.getByText('Loading variables...')).toBeInTheDocument();
     });
@@ -134,8 +135,8 @@ describe('VariablesComponent', () => {
 
       render(<VariablesComponent />);
 
-      expect(screen.getByText('No variables yet')).toBeInTheDocument();
-      expect(screen.getByText('Create your first variable to get started.')).toBeInTheDocument();
+      expect(screen.getByText('No variables created yet')).toBeInTheDocument();
+      expect(screen.getByText('Create your first variable to use in requests')).toBeInTheDocument();
       expect(screen.getAllByText('Add Variable')).toHaveLength(2);
     });
 
@@ -157,7 +158,7 @@ describe('VariablesComponent', () => {
     it('renders variables table when variables exist', () => {
       render(<VariablesComponent />);
 
-      expect(screen.getByText('Key')).toBeInTheDocument();
+      expect(screen.getByText('Name')).toBeInTheDocument();
       expect(screen.getByText('Value')).toBeInTheDocument();
       expect(screen.getByText('Description')).toBeInTheDocument();
       expect(screen.getByText('Actions')).toBeInTheDocument();
@@ -321,11 +322,9 @@ describe('VariablesComponent', () => {
     it('renders page title and description', () => {
       render(<VariablesComponent />);
 
+      expect(screen.getByRole('heading', { level: 1, name: 'Variables' })).toBeInTheDocument();
       expect(
-        screen.getByRole('heading', { level: 1, name: 'Environment Variables' })
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText('Manage your environment variables and configurations.')
+        screen.getByText('Manage your environment variables and configurations')
       ).toBeInTheDocument();
     });
 
@@ -337,7 +336,7 @@ describe('VariablesComponent', () => {
 
       const headers = screen.getAllByRole('columnheader');
       expect(headers).toHaveLength(4);
-      expect(headers[0]).toHaveTextContent('Key');
+      expect(headers[0]).toHaveTextContent('Name');
       expect(headers[1]).toHaveTextContent('Value');
       expect(headers[2]).toHaveTextContent('Description');
       expect(headers[3]).toHaveTextContent('Actions');
@@ -467,7 +466,7 @@ describe('VariablesComponent', () => {
       rerender(<VariablesComponent />);
 
       expect(screen.queryByTestId('variable-item-1')).not.toBeInTheDocument();
-      expect(screen.getByText('No variables yet')).toBeInTheDocument();
+      expect(screen.getByText('No variables created yet')).toBeInTheDocument();
     });
 
     it('handles loading state transitions', () => {

@@ -67,7 +67,7 @@ export default function HistoryComponent() {
   return (
     <>
       <h1>{t('title')}</h1>
-      <p className="h2">View and manage your API request history.</p>
+      <p className="h2">{t('description')}</p>
       {requests.length === 0 && (
         <div className="empty-state">
           <p>{t('noHistory')}</p>

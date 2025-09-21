@@ -34,7 +34,7 @@ export default function VariablesComponent() {
     return (
       <div className="variables-page">
         <h1>{t('title')}</h1>
-        <p className="h2">Manage your environment variables and configurations.</p>
+        <p className="h2">{t('description')}</p>
         <div className="loading">{t('loading')}</div>
       </div>
     );
@@ -45,7 +45,7 @@ export default function VariablesComponent() {
       <div className="variables-header">
         <div className="variables-title">
           <h1>{t('title')}</h1>
-          <p className="h2">Manage your environment variables and configurations.</p>
+          <p className="h2">{t('description')}</p>
         </div>
         <button onClick={() => setIsAddModalOpen(true)} className="btn btn--primary">
           {t('addVariable')}
@@ -77,7 +77,7 @@ export default function VariablesComponent() {
                 <tr>
                   <th>{t('name')}</th>
                   <th>{t('value')}</th>
-                  <th>{t('description')}</th>
+                  <th>{t('descriptionColumn')}</th>
                   <th>{t('actions')}</th>
                 </tr>
               </thead>
