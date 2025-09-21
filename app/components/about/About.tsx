@@ -18,7 +18,7 @@ function About() {
       id: 3,
       name: 'Kirill',
       role: 'Frontend Developer',
-      bio: 'Roofing specialist, father of a large family, where patience and multitasking are trained - ideal skills for development. In the project, he proved that you can work equally confidently with both building architecture and application architecture.',
+      bio: 'More than twenty years in leadership positions in various business projects, English B1-B2, Spanish B1, experience in 1C and website development. In the project, he proved that you can work equally confidently with both building architecture and application architecture.',
       github: 'https://github.com/KirrBrest',
     },
   ];
