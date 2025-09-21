@@ -25,6 +25,7 @@ vi.mock('next-intl', () => ({
       client: 'Client',
       history: 'History',
       variables: 'Variables',
+      mainPage: 'Main Page',
       select: 'Select Language',
       english: 'English',
       russian: 'Русский',
@@ -33,6 +34,15 @@ vi.mock('next-intl', () => ({
     return translations[key] || key;
   }),
   useLocale: vi.fn(() => 'en'),
+}));
+
+vi.mock('../components/authContext/authContext', () => ({
+  useAuth: vi.fn(() => ({
+    user: null,
+    loading: false,
+    error: null,
+    signOut: vi.fn(),
+  })),
 }));
 
 vi.mock('next/link', () => ({

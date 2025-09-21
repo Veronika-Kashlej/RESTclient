@@ -33,6 +33,15 @@ vi.mock('next-intl', () => ({
   }),
 }));
 
+vi.mock('../../components/authContext/authContext', () => ({
+  useAuth: vi.fn(() => ({
+    user: null,
+    loading: false,
+    error: null,
+    signOut: vi.fn(),
+  })),
+}));
+
 vi.mock('../firebase/firebase', () => ({
   auth: {},
 }));

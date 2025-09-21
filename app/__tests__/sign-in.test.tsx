@@ -18,6 +18,15 @@ vi.mock('next-intl', () => ({
   useTranslations: vi.fn(() => (key: string) => key),
 }));
 
+vi.mock('../components/authContext/authContext', () => ({
+  useAuth: vi.fn(() => ({
+    user: null,
+    loading: false,
+    error: null,
+    signOut: vi.fn(),
+  })),
+}));
+
 describe('Sign In Page', () => {
   it('renders sign in title', () => {
     render(<SignIn />);

@@ -1,21 +1,33 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 import { auth } from '../../firebase/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { useAuth } from '../../components/authContext/authContext';
 
 export default function SignUp() {
   const t = useTranslations('auth');
   const params = useParams();
   const locale = params.locale as string;
+  const router = useRouter();
+  const { user, loading } = useAuth();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push(`/${locale}`);
+    }
+  }, [user, loading, router, locale]);
+
+  if (loading) {
+    return <div className="loading-text">{t('loading')}</div>;
+  }
 
   const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
