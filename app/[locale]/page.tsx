@@ -8,6 +8,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/firebase';
 import styles from '../page.module.scss';
 import Link from 'next/link';
+import About from '@/components/about/About';
 
 export default function Home() {
   const t = useTranslations('auth');
@@ -47,6 +48,7 @@ export default function Home() {
     return (
       <>
         <h1 className="title">Welcome!</h1>
+        <About />
         <div className="header__btns">
           <Link href={`/${locale}/sign-in`} className="btn-primary">
             {t('signIn')}
@@ -73,6 +75,7 @@ export default function Home() {
         A simple example query to Firebase works and was placed here:
         <p>{message}</p>
       </div>
+      <About />
       <div className="navigation-links">
         <Link href={`/${locale}/client`} className="btn-primary">
           Go to REST Client
