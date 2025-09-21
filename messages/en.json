@@ -73,6 +73,7 @@
     "errorLoading": "Error loading history",
     "noHistory": "No requests made yet",
     "makeFirst": "Make your first request to see it here",
+    "goToClient": "Go to REST Client",
     "method": "Method",
     "url": "URL",
     "status": "Status",

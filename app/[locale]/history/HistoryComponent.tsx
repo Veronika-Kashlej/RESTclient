@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { collection, getDocs, query, orderBy, Timestamp } from 'firebase/firestore';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { db } from '../../firebase/firebase';
+import Link from 'next/link';
 
 type HeaderItem = {
   key: string;
@@ -29,11 +30,12 @@ type RequestRecord = {
 
 export default function HistoryComponent() {
   const t = useTranslations('history');
+  const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
   const [requests, setRequests] = useState<RequestRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const router = useRouter();
 
   useEffect(() => {
     async function fetchRequests() {
@@ -66,7 +68,15 @@ export default function HistoryComponent() {
     <>
       <h1>{t('title')}</h1>
       <p className="h2">View and manage your API request history.</p>
-      {requests.length === 0 && <p>{t('noHistory')}</p>}
+      {requests.length === 0 && (
+        <div className="empty-state">
+          <p>{t('noHistory')}</p>
+          <p>{t('makeFirst')}</p>
+          <Link href={`/${locale}/client`} className="btn-primary">
+            {t('goToClient')}
+          </Link>
+        </div>
+      )}
       <ul className="history-content">
         {requests.map(
           ({
