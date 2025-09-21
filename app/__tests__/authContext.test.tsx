@@ -1,5 +1,8 @@
 import { render, screen, waitFor, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+
+vi.unmock('../components/authContext/authContext');
+
 import { AuthProvider, useAuth } from '../components/authContext/authContext';
 import { onAuthStateChanged, signOut as firebaseSignOut, User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';

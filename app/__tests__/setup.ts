@@ -14,3 +14,13 @@ vi.mock('next-intl/server', () => ({
   getMessages: vi.fn(() => Promise.resolve({})),
   getRequestConfig: vi.fn(),
 }));
+
+vi.mock('../components/authContext/authContext', () => ({
+  useAuth: vi.fn(() => ({
+    user: null,
+    loading: false,
+    error: null,
+    signOut: vi.fn(),
+  })),
+  AuthProvider: ({ children }: { children: React.ReactNode }) => children,
+}));

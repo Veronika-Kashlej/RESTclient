@@ -2,7 +2,6 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useRouter } from 'next/navigation';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import SignIn from '../[locale]/sign-in/page';
 
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
@@ -29,18 +28,11 @@ vi.mock('next-intl', () => ({
   }),
 }));
 
-vi.mock('../../components/authContext/authContext', () => ({
-  useAuth: vi.fn(() => ({
-    user: null,
-    loading: false,
-    error: null,
-    signOut: vi.fn(),
-  })),
-}));
-
 vi.mock('../firebase/firebase', () => ({
   auth: {},
 }));
+
+import SignIn from '../[locale]/sign-in/page';
 
 const mockPush = vi.fn();
 
