@@ -47,7 +47,6 @@ export const generateJavaScriptXHR = (data: RequestData): string => {
   const xhr = `const xhr = new XMLHttpRequest();
 xhr.open('${method.toUpperCase()}', '${url}');
 
-// Set headers
 ${Object.entries(headers)
   .map(([key, value]) => `xhr.setRequestHeader('${key}', '${value}');`)
   .join('\n')}
@@ -138,7 +137,6 @@ export const generateJava = (data: RequestData): string => {
   const bodyCode =
     body && ['POST', 'PUT', 'PATCH'].includes(method.toUpperCase())
       ? `
-        // Write body
         try (OutputStream os = connection.getOutputStream()) {
             byte[] input = "${body}".getBytes("utf-8");
             os.write(input, 0, input.length);
