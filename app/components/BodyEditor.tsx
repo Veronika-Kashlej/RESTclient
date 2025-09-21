@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import Editor from '@monaco-editor/react';
 import './BodyEditor.sass';
 
@@ -19,6 +20,7 @@ export default function BodyEditor({
   onBodyTypeChange,
   onBodyContentChange,
 }: BodyEditorProps) {
+  const t = useTranslations('client');
   const [error, setError] = useState<string | null>(null);
   const editorRef = useRef<unknown>(null);
 
@@ -35,7 +37,7 @@ export default function BodyEditor({
         JSON.parse(content);
         setError(null);
       } catch {
-        setError('Invalid JSON format');
+        setError(t('invalidJson'));
       }
     } else {
       setError(null);
@@ -50,7 +52,7 @@ export default function BodyEditor({
         onBodyContentChange(prettified);
         setError(null);
       } catch {
-        setError('Cannot prettify invalid JSON');
+        setError(t('invalidJson'));
       }
     }
   };
@@ -70,14 +72,14 @@ export default function BodyEditor({
               onClick={() => onBodyTypeChange('json')}
               data-testid="json-type-btn"
             >
-              JSON
+              {t('json')}
             </button>
             <button
               className={`body-editor__type-btn ${bodyType === 'text' ? 'body-editor__type-btn--active' : ''}`}
               onClick={() => onBodyTypeChange('text')}
               data-testid="text-type-btn"
             >
-              Text
+              {t('text')}
             </button>
           </div>
           {bodyType === 'json' && (
@@ -86,7 +88,7 @@ export default function BodyEditor({
               onClick={handlePrettify}
               data-testid="prettify-btn"
             >
-              Prettify
+              {t('prettify')}
             </button>
           )}
         </div>

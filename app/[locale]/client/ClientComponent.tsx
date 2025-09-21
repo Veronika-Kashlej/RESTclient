@@ -1,18 +1,18 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import MethodSelector from '../components/MethodSelector';
-import UrlInput from '../components/UrlInput';
-import HeadersEditor from '../components/HeadersEditor';
-import BodyEditor, { type BodyType } from '../components/BodyEditor';
-import CodeGenerator from '../components/codeGenerator/CodeGenerator';
-import { useUrlSync } from '../hooks/useUrlSync';
-import { useVariables } from '../hooks/useVariables';
-import { substituteVariables, substituteVariablesInJson } from '../utils/variableSubstitution';
-import type { HttpMethod, HeaderItem, RequestState } from '../types/interfaces';
+import MethodSelector from '../../components/MethodSelector';
+import UrlInput from '../../components/UrlInput';
+import HeadersEditor from '../../components/HeadersEditor';
+import BodyEditor, { type BodyType } from '../../components/BodyEditor';
+import CodeGenerator from '../../components/codeGenerator/CodeGenerator';
+import { useUrlSync } from '../../hooks/useUrlSync';
+import { useVariables } from '../../hooks/useVariables';
+import { substituteVariables, substituteVariablesInJson } from '../../utils/variableSubstitution';
+import type { HttpMethod, HeaderItem, RequestState } from '../../types/interfaces';
 
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../firebase/firebase';
+import { db } from '../../firebase/firebase';
 
 import { useSearchParams } from 'next/navigation';
 

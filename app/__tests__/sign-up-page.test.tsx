@@ -2,14 +2,35 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useRouter } from 'next/navigation';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import SignUp from '../sign-up/page';
+import SignUp from '../[locale]/sign-up/page';
 
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  useParams: vi.fn(() => ({ locale: 'en' })),
 }));
 
 vi.mock('firebase/auth', () => ({
   createUserWithEmailAndPassword: vi.fn(),
+}));
+
+vi.mock('next-intl', () => ({
+  useTranslations: vi.fn(() => (key: string) => {
+    const translations: Record<string, string> = {
+      signUp: 'Sign Up',
+      createAccount: 'Create your account to get started.',
+      email: 'Email',
+      password: 'Password',
+      confirmPassword: 'Confirm Password',
+      showPassword: 'Show Password',
+      registerButton: 'Register',
+      loading: 'Loading...',
+      emailInUse: 'Email is already in use. Please try a different email.',
+      weakPassword: 'Password should be at least 6 characters.',
+      passwordMismatch: 'Passwords do not match.',
+      passwordsDoNotMatch: 'Passwords do not match.',
+    };
+    return translations[key] || key;
+  }),
 }));
 
 vi.mock('../firebase/firebase', () => ({
@@ -40,7 +61,7 @@ describe('SignUp Page', () => {
       expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
       expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
       expect(screen.getByPlaceholderText('Confirm Password')).toBeInTheDocument();
-      expect(screen.getByText('Show password')).toBeInTheDocument();
+      expect(screen.getByText('Show Password')).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Register' })).toBeInTheDocument();
     });
 
@@ -168,7 +189,7 @@ describe('SignUp Page', () => {
       if (form) fireEvent.submit(form);
 
       await waitFor(() => {
-        expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
+        expect(screen.getByText('Passwords do not match.')).toBeInTheDocument();
       });
 
       expect(createUserWithEmailAndPassword).not.toHaveBeenCalled();
@@ -210,7 +231,7 @@ describe('SignUp Page', () => {
       if (form) fireEvent.submit(form);
 
       await waitFor(() => {
-        expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
+        expect(screen.getByText('Passwords do not match.')).toBeInTheDocument();
       });
     });
 
@@ -231,7 +252,7 @@ describe('SignUp Page', () => {
       if (form) fireEvent.submit(form);
 
       await waitFor(() => {
-        expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
+        expect(screen.getByText('Passwords do not match.')).toBeInTheDocument();
       });
 
       fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
@@ -286,7 +307,7 @@ describe('SignUp Page', () => {
       if (form) fireEvent.submit(form);
 
       await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith('/');
+        expect(mockPush).toHaveBeenCalledWith('/en');
       });
     });
 
@@ -472,7 +493,7 @@ describe('SignUp Page', () => {
 
       await waitFor(
         () => {
-          expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
+          expect(screen.getByText('Passwords do not match.')).toBeInTheDocument();
         },
         { timeout: 3000 }
       );
@@ -582,7 +603,7 @@ describe('SignUp Page', () => {
           'user@example.com',
           'securepassword'
         );
-        expect(mockPush).toHaveBeenCalledWith('/');
+        expect(mockPush).toHaveBeenCalledWith('/en');
       });
     });
 
@@ -612,7 +633,7 @@ describe('SignUp Page', () => {
       if (form) fireEvent.submit(form);
 
       await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith('/');
+        expect(mockPush).toHaveBeenCalledWith('/en');
         expect(screen.queryByText('Email already in use')).not.toBeInTheDocument();
       });
     });
@@ -634,7 +655,7 @@ describe('SignUp Page', () => {
       if (form) fireEvent.submit(form);
 
       await waitFor(() => {
-        expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
+        expect(screen.getByText('Passwords do not match.')).toBeInTheDocument();
       });
 
       fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
@@ -646,7 +667,7 @@ describe('SignUp Page', () => {
           'user@example.com',
           'password123'
         );
-        expect(mockPush).toHaveBeenCalledWith('/');
+        expect(mockPush).toHaveBeenCalledWith('/en');
         expect(screen.queryByText('Passwords do not match')).not.toBeInTheDocument();
       });
     });

@@ -1,6 +1,6 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import Home from '../page';
+import Home from '../[locale]/page';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../components/authContext/authContext';
 import { doc, getDoc } from 'firebase/firestore';
@@ -8,6 +8,20 @@ import { User } from 'firebase/auth';
 
 vi.mock('next/navigation', () => ({
   useRouter: vi.fn(),
+  redirect: vi.fn(),
+  useParams: vi.fn(() => ({ locale: 'en' })),
+}));
+
+vi.mock('next-intl', () => ({
+  useTranslations: vi.fn(() => (key: string) => {
+    const translations: Record<string, string> = {
+      loading: 'Loading...',
+      signIn: 'Sign In',
+      signUp: 'Sign Up',
+      signOut: 'Sign Out',
+    };
+    return translations[key] || key;
+  }),
 }));
 
 vi.mock('../components/authContext/authContext', () => ({
@@ -89,7 +103,7 @@ describe('Home Component', () => {
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
-  it('should redirect to sign-up when user is not authenticated', () => {
+  it('should show sign in and sign up links when user is not authenticated', () => {
     vi.mocked(useAuth).mockReturnValue({
       user: null,
       loading: false,
@@ -99,7 +113,9 @@ describe('Home Component', () => {
 
     render(<Home />);
 
-    expect(mockPush).toHaveBeenCalledWith('/');
+    expect(screen.getByText('Welcome!')).toBeInTheDocument();
+    expect(screen.getByText('Sign In')).toBeInTheDocument();
+    expect(screen.getByText('Sign Up')).toBeInTheDocument();
   });
 
   it('should show auth error when present', async () => {
@@ -217,7 +233,7 @@ describe('Home Component', () => {
       expect(screen.getByText('Postman clone is here')).toBeInTheDocument();
     });
 
-    const logoutButton = screen.getByText('Logout');
+    const logoutButton = screen.getByText('Sign Out');
     fireEvent.click(logoutButton);
 
     expect(mockSignOut).toHaveBeenCalledTimes(1);

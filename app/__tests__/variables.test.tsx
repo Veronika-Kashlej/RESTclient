@@ -1,6 +1,15 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
-import VariablesComponent from '../variables/VariablesComponent';
+import { describe, it, expect, vi } from 'vitest';
+import VariablesComponent from '../[locale]/variables/VariablesComponent';
+
+vi.mock('next-intl', () => ({
+  useTranslations: vi.fn(() => (key: string) => {
+    const translations: Record<string, string> = {
+      title: 'Environment Variables',
+    };
+    return translations[key] || key;
+  }),
+}));
 
 describe('Variables Component', () => {
   it('renders variables title', () => {

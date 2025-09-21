@@ -1,15 +1,19 @@
 'use client';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 const Navigation = () => {
+  const t = useTranslations('navigation');
   const pathname = usePathname();
+  const params = useParams();
+  const locale = params.locale as string;
 
   const navItems = [
-    { href: '/', label: 'Home', icon: '🏠' },
-    { href: '/client', label: 'Client', icon: '🚀' },
-    { href: '/history', label: 'History', icon: '📊' },
-    { href: '/variables', label: 'Variables', icon: '⚙️' },
+    { href: `/${locale}`, label: t('home'), icon: '🏠' },
+    { href: `/${locale}/client`, label: t('client'), icon: '🚀' },
+    { href: `/${locale}/history`, label: t('history'), icon: '📊' },
+    { href: `/${locale}/variables`, label: t('variables'), icon: '⚙️' },
   ];
 
   return (

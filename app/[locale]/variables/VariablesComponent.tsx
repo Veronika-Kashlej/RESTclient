@@ -1,13 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { useVariables } from '../hooks/useVariables';
-import VariableItem from '../components/variables/VariableItem';
-import AddVariableModal from '../components/variables/AddVariableModal';
-import type { VariableFormData } from '../types/interfaces';
+import { useTranslations } from 'next-intl';
+import { useVariables } from '../../hooks/useVariables';
+import VariableItem from '../../components/variables/VariableItem';
+import AddVariableModal from '../../components/variables/AddVariableModal';
+import type { VariableFormData } from '../../types/interfaces';
 import './VariablesComponent.sass';
 
 export default function VariablesComponent() {
+  const t = useTranslations('variables');
   const { variables, loading, error, addVariable, updateVariable, deleteVariable, clearError } =
     useVariables();
 
@@ -31,9 +33,9 @@ export default function VariablesComponent() {
   if (loading) {
     return (
       <div className="variables-page">
-        <h1>Environment Variables</h1>
+        <h1>{t('title')}</h1>
         <p className="h2">Manage your environment variables and configurations.</p>
-        <div className="loading">Loading variables...</div>
+        <div className="loading">{t('loading')}</div>
       </div>
     );
   }
@@ -42,11 +44,11 @@ export default function VariablesComponent() {
     <div className="variables-page">
       <div className="variables-header">
         <div className="variables-title">
-          <h1>Environment Variables</h1>
+          <h1>{t('title')}</h1>
           <p className="h2">Manage your environment variables and configurations.</p>
         </div>
         <button onClick={() => setIsAddModalOpen(true)} className="btn btn--primary">
-          Add Variable
+          {t('addVariable')}
         </button>
       </div>
 
@@ -62,10 +64,10 @@ export default function VariablesComponent() {
       <div className="variables-content">
         {variables.length === 0 ? (
           <div className="empty-state">
-            <h3>No variables yet</h3>
-            <p>Add your first environment variable to get started.</p>
+            <h3>{t('noVariables')}</h3>
+            <p>{t('createFirst')}</p>
             <button onClick={() => setIsAddModalOpen(true)} className="btn btn--primary">
-              Add Your First Variable
+              {t('addVariable')}
             </button>
           </div>
         ) : (
@@ -73,10 +75,10 @@ export default function VariablesComponent() {
             <table className="variables-table">
               <thead>
                 <tr>
-                  <th>Key</th>
-                  <th>Value</th>
-                  <th>Description</th>
-                  <th>Actions</th>
+                  <th>{t('name')}</th>
+                  <th>{t('value')}</th>
+                  <th>{t('description')}</th>
+                  <th>{t('actions')}</th>
                 </tr>
               </thead>
               <tbody>

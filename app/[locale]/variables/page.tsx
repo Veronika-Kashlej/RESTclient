@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import dynamic from 'next/dynamic';
-import withAuth from '../components/auth/withAuth';
+import withAuth from '../../components/auth/withAuth';
 
 const VariablesComponent = dynamic(() => import('./VariablesComponent'), {
   loading: () => <div>Loading Variables...</div>,

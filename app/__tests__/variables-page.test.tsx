@@ -50,7 +50,7 @@ vi.mock('./VariablesComponent', () => ({
   default: () => <div data-testid="variables-component">Variables Component</div>,
 }));
 
-import VariablesPage from '../variables/page';
+import VariablesPage from '../[locale]/variables/page';
 
 describe('Variables Page', () => {
   it('should render with auth wrapper', () => {

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import SignUp from '../sign-up/page';
+import SignUp from '../[locale]/sign-up/page';
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({
@@ -11,13 +11,18 @@ vi.mock('next/navigation', () => ({
     prefetch: vi.fn(),
     pathname: '/',
   }),
+  useParams: vi.fn(() => ({ locale: 'en' })),
+}));
+
+vi.mock('next-intl', () => ({
+  useTranslations: vi.fn(() => (key: string) => key),
 }));
 
 describe('Sign Up Page', () => {
   it('renders sign up title', () => {
     render(<SignUp />);
 
-    expect(screen.getByText('Sign Up')).toBeInTheDocument();
+    expect(screen.getByText('signUp')).toBeInTheDocument();
   });
 
   it('renders create account message', () => {

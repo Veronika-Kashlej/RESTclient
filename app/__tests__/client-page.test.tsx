@@ -50,7 +50,7 @@ vi.mock('./ClientComponent', () => ({
   default: () => <div data-testid="client-component">Client Component</div>,
 }));
 
-import ClientPage from '../client/page';
+import ClientPage from '../[locale]/client/page';
 
 describe('Client Page', () => {
   it('should render with auth wrapper', () => {

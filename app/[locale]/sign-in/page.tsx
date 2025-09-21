@@ -1,30 +1,26 @@
 'use client';
-
 import { useState, FormEvent } from 'react';
-import { auth } from '../firebase/firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useRouter } from 'next/navigation';
+import { auth } from '../../firebase/firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
-export default function SignUp() {
+export default function SignIn() {
+  const t = useTranslations('auth');
+  const params = useParams();
+  const locale = params.locale as string;
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState(false);
-  const [passwordConfirm, setPasswordConfirm] = useState('');
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleRegister = async (e: FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-
-    if (password !== passwordConfirm) {
-      setError('Passwords do not match');
-      return;
-    }
-
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      router.push('/');
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push(`/${locale}`);
     } catch (err) {
       if (err instanceof Error) setError(err.message);
       else setError('A new error occurred');
@@ -32,15 +28,15 @@ export default function SignUp() {
   };
 
   return (
-    <div className="auth-page">
-      <h1>Sign Up</h1>
-      <p className="h2">Create your account to get started.</p>
+    <>
+      <h1>{t('signIn')}</h1>
+      <p className="h2">Welcome back! Please sign in to your account.</p>
       <div className="h3 auth-wrapper">
-        <form className="sign-upForm" onSubmit={handleRegister}>
+        <form onSubmit={handleLogin}>
           <input
             className="ui-input"
             type="email"
-            placeholder="Email"
+            placeholder={t('email')}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -49,22 +45,14 @@ export default function SignUp() {
           <input
             className="ui-input"
             type={showPassword ? 'text' : 'password'}
-            placeholder="Password"
+            placeholder={t('password')}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
           <br />
-          <input
-            className="ui-input"
-            type={showPassword ? 'text' : 'password'}
-            placeholder="Confirm Password"
-            value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
-            required
-          />
           <label className="ui-checkbox">
-            <p className="h3">Show password</p>
+            <p className="h3">{showPassword ? t('hidePassword') : t('showPassword')}</p>
             <input
               type="checkbox"
               checked={showPassword}
@@ -72,12 +60,12 @@ export default function SignUp() {
             ></input>
             <span></span>
           </label>
-          <button className="signup-btn" type="submit">
-            Register
+          <button className="signin-btn" type="submit">
+            {t('loginButton')}
           </button>
         </form>
         {error && <p className="auth-wrapper__error">{error}</p>}
       </div>
-    </div>
+    </>
   );
 }

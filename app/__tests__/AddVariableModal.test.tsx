@@ -2,6 +2,22 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import AddVariableModal from '../components/variables/AddVariableModal';
 
+vi.mock('next-intl', () => ({
+  useTranslations: vi.fn(() => (key: string) => {
+    const translations: Record<string, string> = {
+      addNew: 'Add New Variable',
+      name: 'Key',
+      value: 'Value',
+      description: 'Description',
+      cancel: 'Cancel',
+      addVariable: 'Add Variable',
+      keyRequired: 'Key is required',
+      valueRequired: 'Value is required',
+    };
+    return translations[key] || key;
+  }),
+}));
+
 const mockOnClose = vi.fn();
 const mockOnAdd = vi.fn();
 

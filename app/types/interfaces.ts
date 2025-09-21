@@ -77,3 +77,16 @@ export interface AddVariableModalProps {
   onAdd: (data: VariableFormData) => void;
   error?: string | null;
 }
+
+export interface MockVariableItemProps {
+  variable: Variable;
+  onUpdate: (id: string, data: { key: string; value: string; description: string }) => void;
+  onDelete: (id: string) => void;
+}
+
+export interface MockAddVariableModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAdd: (data: { key: string; value: string; description: string }) => void;
+  error?: string | null;
+}
