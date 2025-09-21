@@ -1,0 +1,32 @@
+@use '../../utils/styles/general/vars.scss' as *;
+@use '../../utils/styles/mixins/_adaptive-properties.sass' as *;
+
+.ui-input 
+  display: block
+  padding: aCalc(15)
+  border: 1px solid #f3f0f7
+  background-color: #f3f0f7
+  border-radius: aCalc(6)
+  font-size: aCalc(18)
+  line-height: aCalc(24)
+  font-weight: 400
+  width: 100%
+  color: #000000
+  &::placeholder
+    background-color: #f3f0f7
+    font-size: aCalc(18)
+    line-height: aCalc(24)
+    font-weight: 400
+    color: #000000
+
+.auth-wrapper
+  position: relative
+  &__error 
+    position: absolute
+    left: -80% 
+    background-color: red
+    padding: aCalc(18)
+    border-radius: aCalc(6)
+    color: #ffffff
+    top: 50%
+    z-index: 1

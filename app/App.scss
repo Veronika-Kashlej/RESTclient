@@ -1,0 +1,13 @@
+@use './utils/styles/general/vars.scss' as *;
+@use './utils/styles/mixins/_adaptive-properties.sass' as *;
+@use './utils/styles/general/general.sass' as *;
+
+@use './components/typo/typo.sass' as *;
+@use './components/navigation/navigation.sass' as *;
+@use './components/authentication/authentication.sass' as *;
+@use './components/header/header.sass' as *;
+@use './components/footer/footer.sass' as *;
+@use './components/not-found/not-found.sass' as *;
+@use './components/history/history.sass' as *;
+@use './components/form/form.sass' as *;
+@use './components/about/about.sass' as *;

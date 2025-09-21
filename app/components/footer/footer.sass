@@ -1,0 +1,63 @@
+@use '../../utils/styles/general/vars.scss' as *
+@use '../../utils/styles/mixins/_adaptive-properties.sass' as *
+
+.footer
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: 30px 80px
+  background: #ffffff
+  border-top: 2px solid #f0f0f0
+  box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.06)
+
+  .h3
+    color: #2d3748
+    font-size: 18px
+    font-weight: 600
+    text-decoration: none
+    transition: all 0.3s ease
+    padding: 10px 16px
+    border-radius: 8px
+
+    &:hover
+      color: #0056b3
+      transform: translateY(-2px)
+      box-shadow: 0 4px 12px #0056b3
+
+  .h4
+    color: #718096
+    font-size: 16px
+    font-weight: 500
+    margin: 0
+    padding: 10px 20px
+    background: #f8f9fa
+    border-radius: 20px
+
+  a:last-child
+    transition: all 0.3s ease
+    padding: 10px
+    border-radius: 12px
+
+    &:hover
+      transform: scale(1.1) rotate(5deg)
+      box-shadow: 0 6px 20px #0056b3
+
+  svg, img
+    width: 50px
+    height: 50px
+    transition: transform 0.3s ease
+
++mob($sm)
+  .footer
+    padding: 25px 20px
+    flex-direction: column
+    gap: 25px
+    text-align: center
+
+    .h3, .h4
+      font-size: 16px
+      padding: 12px 20px
+
+    svg, img
+      width: 60px
+      height: 60px

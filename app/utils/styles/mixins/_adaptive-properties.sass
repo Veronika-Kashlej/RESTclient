@@ -1,0 +1,14 @@
+
+@mixin mob($width)
+  @media only screen and (max-width: $width+ "px")
+    @content
+
+$maxWidth: 3840
+$maxWidthContiner: 1920
+$minWidth: 1280
+
+@function aCalc($startSize)
+  $minSize: round(($startSize / 1920 ) * 1280)
+  $addSize: round($startSize - $minSize)
+  $result: calc(#{$minSize + px} + #{$addSize} * ((100vw - #{$minWidth + px}) / #{$maxWidthContiner - $minWidth}))
+  @return $result

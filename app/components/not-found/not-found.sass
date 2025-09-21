@@ -1,0 +1,124 @@
+.not-found
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  min-height: 100vh
+  text-align: center
+  padding: 60px 40px
+  background: white
+  color: #2d3748
+  position: relative
+
+  h1
+    font-size: 8rem
+    font-weight: 800
+    margin-bottom: 40px
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%)
+    -webkit-background-clip: text
+    background-clip: text
+    position: relative
+    z-index: 2
+
+  .h2
+    font-size: 1.5rem
+    margin-bottom: 30px
+    font-weight: 400
+    max-width: 500px
+    line-height: 1.6
+    color: #64748b
+    position: relative
+    z-index: 2
+
+  .h3
+    font-size: 1.1rem
+    margin-bottom: 40px
+    color: #475569
+    position: relative
+    z-index: 2
+
+    ul
+      list-style: none
+      padding: 0
+      margin: 30px 0 0 0
+      display: flex
+      flex-wrap: wrap
+      gap: 20px
+      justify-content: center
+
+      li
+        margin: 0
+
+        a
+          color: #007bff
+          text-decoration: none
+          font-weight: 600
+          padding: 14px 28px
+          border: 2px solid #007bff
+          border-radius: 50px
+          transition: all 0.3s ease
+          display: inline-block
+          background: transparent
+          position: relative
+          overflow: hidden
+
+          &:hover
+            background: #007bff
+            color: white
+            transform: translateY(-2px)
+            box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3)
+
+            &::before
+              left: 100%
+
+@keyframes fadeInUp
+  from
+    opacity: 0
+    transform: translateY(30px)
+  to
+    opacity: 1
+    transform: translateY(0)
+
+.not-found h1,
+.not-found .h2,
+.not-found .h3
+  animation: fadeInUp 0.8s ease forwards
+
+.not-found h1
+  animation-delay: 0.1s
+
+.not-found .h2
+  animation-delay: 0.2s
+
+.not-found .h3
+  animation-delay: 0.3s
+
+.not-found ul li
+  animation: fadeInUp 0.8s ease forwards
+
+.not-found ul li:nth-child(1)
+  animation-delay: 0.4s
+
+.not-found ul li:nth-child(2)
+  animation-delay: 0.5s
+
+.not-found ul li:nth-child(3)
+  animation-delay: 0.6s
+
+.not-found ul li:nth-child(4)
+  animation-delay: 0.7s
+
+.not-found
+  .h2
+    font-weight: 300
+    letter-spacing: 0.5px
+
+  .h3
+    font-weight: 400
+    line-height: 1.5
+
+.not-found h1
+  transition: transform 0.3s ease
+
+  &:hover
+    transform: scale(1.05)
