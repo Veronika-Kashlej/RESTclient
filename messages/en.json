@@ -3,7 +3,8 @@
     "home": "Home",
     "client": "Client",
     "history": "History",
-    "variables": "Variables"
+    "variables": "Variables",
+    "mainPage": "Main Page"
   },
   "auth": {
     "signIn": "Sign In",

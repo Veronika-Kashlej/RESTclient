@@ -3,7 +3,8 @@
     "home": "Inicio",
     "client": "Cliente",
     "history": "Historial",
-    "variables": "Variables"
+    "variables": "Variables",
+    "mainPage": "Página Principal"
   },
   "auth": {
     "signIn": "Iniciar Sesión",

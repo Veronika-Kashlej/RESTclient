@@ -3,7 +3,8 @@
     "home": "Главная",
     "client": "Клиент",
     "history": "История",
-    "variables": "Переменные"
+    "variables": "Переменные",
+    "mainPage": "Главная страница"
   },
   "auth": {
     "signIn": "Вход",

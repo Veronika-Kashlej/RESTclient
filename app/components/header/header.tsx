@@ -7,12 +7,15 @@ import rsLogo from '../../assets/rss-logo.svg';
 import Image from 'next/image';
 import Navigation from '../Navigation';
 import LanguageSwitcher from '../LanguageSwitcher';
+import { useAuth } from '../authContext/authContext';
 import type { Header as HeaderType } from '@/types/interfaces';
 
 const Header = (props: HeaderType) => {
-  const t = useTranslations('auth');
+  const tAuth = useTranslations('auth');
+  const tNav = useTranslations('navigation');
   const params = useParams();
   const locale = params.locale as string;
+  const { user } = useAuth();
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
@@ -32,12 +35,20 @@ const Header = (props: HeaderType) => {
       <Navigation />
       <div className="header__btns">
         <LanguageSwitcher />
-        <Link href={`/${locale}/sign-in`} className="btn-primary">
-          {t('signIn')}
-        </Link>
-        <Link href={`/${locale}/sign-up`} className="btn-primary">
-          {t('signUp')}
-        </Link>
+        {user ? (
+          <Link href={`/${locale}`} className="btn-primary">
+            {tNav('mainPage')}
+          </Link>
+        ) : (
+          <>
+            <Link href={`/${locale}/sign-in`} className="btn-primary">
+              {tAuth('signIn')}
+            </Link>
+            <Link href={`/${locale}/sign-up`} className="btn-primary">
+              {tAuth('signUp')}
+            </Link>
+          </>
+        )}
       </div>
     </header>
   );
