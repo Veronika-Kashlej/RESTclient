@@ -47,7 +47,7 @@ export default function Home() {
   if (!user) {
     return (
       <>
-        <h1 className="title">Welcome!</h1>
+        <h1 className="title">{t('welcome')}</h1>
         <About />
         <div className="header__btns">
           <Link href={`/${locale}/sign-in`} className="btn-primary">
@@ -69,22 +69,24 @@ export default function Home() {
 
   return (
     <div className={styles['home-page']}>
-      <h1 className="title">Postman clone is here</h1>
-      <h2>Welcome back, {user.email}</h2>
+      <h1 className="title">{t('postmanClone')}</h1>
+      <h2>
+        {t('welcomeBack')}, {user.email}
+      </h2>
       <div className="h3">
-        A simple example query to Firebase works and was placed here:
+        {t('firebaseExample')}
         <p>{message}</p>
       </div>
       <About />
       <div className="navigation-links">
         <Link href={`/${locale}/client`} className="btn-primary">
-          Go to REST Client
+          {t('goToClient')}
         </Link>
         <Link href={`/${locale}/history`} className="btn-secondary">
-          View History
+          {t('viewHistory')}
         </Link>
         <Link href={`/${locale}/variables`} className="btn-secondary">
-          Manage Variables
+          {t('manageVariables')}
         </Link>
       </div>
       <button className="signup-btn" onClick={() => signOut()}>

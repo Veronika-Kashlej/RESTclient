@@ -21,15 +21,27 @@
     "dontHaveAccount": "Don't have an account?",
     "passwordsDoNotMatch": "Passwords do not match",
     "loading": "Loading...",
-    "redirecting": "Redirecting to sign in..."
+    "redirecting": "Redirecting to sign in...",
+    "welcome": "Welcome!",
+    "welcomeBack": "Welcome back",
+    "postmanClone": "Postman clone is here",
+    "firebaseExample": "A simple example query to Firebase works and was placed here:",
+    "goToClient": "Go to REST Client",
+    "viewHistory": "View History",
+    "manageVariables": "Manage Variables"
   },
   "client": {
     "title": "REST Client",
+    "description": "Test your REST APIs with our powerful client",
     "method": "Method",
+    "httpMethod": "HTTP Method",
     "url": "URL",
     "headers": "Headers",
     "body": "Body",
+    "requestBody": "Request Body",
     "send": "Send",
+    "sendRequest": "Send Request",
+    "sending": "Sending...",
     "loading": "Loading...",
     "response": "Response",
     "status": "Status",
@@ -46,7 +58,10 @@
     "text": "Text",
     "prettify": "Prettify",
     "enterUrl": "Please enter a URL",
-    "invalidJson": "Invalid JSON format"
+    "invalidJson": "Invalid JSON format",
+    "requestFailed": "Request failed",
+    "error": "Error",
+    "generatedCode": "Generated Code"
   },
   "variables": {
     "title": "Variables",
@@ -83,7 +98,7 @@
     "headers": "Headers"
   },
   "codeGenerator": {
-    "title": "Code Generator",
+    "title": "Generated Code",
     "language": "Language",
     "copy": "Copy",
     "copied": "Copied!",
@@ -93,7 +108,8 @@
     "python": "Python",
     "java": "Java",
     "csharp": "C#",
-    "go": "Go"
+    "go": "Go",
+    "enterUrl": "Please enter a URL to generate code"
   },
   "common": {
     "close": "Close",
@@ -129,5 +145,15 @@
     "english": "English",
     "russian": "Русский",
     "spanish": "Español"
+  },
+  "about": {
+    "title": "Our Development Team",
+    "description": "We are a passionate team of developers who came together through the RS School program. Our diverse skills and collaborative approach allowed us to create a product we're proud of. Each of us contributed something of our own: one thought through the logic, another followed the design, the third optimized the performance. The result was a project in which we invested knowledge, time and, of course, a couple of sleepless nights before the deadlines.",
+    "githubProfile": "GitHub Profile",
+    "teamLead": "Team Lead",
+    "frontendDeveloper": "Frontend Developer",
+    "veronikaBio": "3nd year student. In the project, I combine the roles of organizer and coder - I distribute tasks, monitor deadlines and write code at the same time. When not at the computer, I dance or play the piano, because life should be multifaceted!",
+    "vladBio": "Vlad holds a Bachelor's degree from Moscow Institute of Electronic Technology (2023). He is proficient in English at B2 level and has intermediate German skills at A2/B1 level. Responsible for implementing the complete Firebase infrastructure. He developed the secure authentication system.",
+    "kirillBio": "More than twenty years in leadership positions in various business projects, English B1-B2, Spanish B1, experience in 1C and website development. In the project, he proved that you can work equally confidently with both building architecture and application architecture."
   }
 }

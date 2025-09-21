@@ -21,7 +21,14 @@
     "dontHaveAccount": "¿No tienes una cuenta?",
     "passwordsDoNotMatch": "Las contraseñas no coinciden",
     "loading": "Cargando...",
-    "redirecting": "Redirigiendo al inicio de sesión..."
+    "redirecting": "Redirigiendo al inicio de sesión...",
+    "welcome": "¡Bienvenido!",
+    "welcomeBack": "Bienvenido de vuelta",
+    "postmanClone": "El clon de Postman está aquí",
+    "firebaseExample": "Un ejemplo simple de consulta a Firebase funciona y se colocó aquí:",
+    "goToClient": "Ir al Cliente REST",
+    "viewHistory": "Ver Historial",
+    "manageVariables": "Gestionar Variables"
   },
   "client": {
     "title": "Cliente REST",
@@ -35,7 +42,7 @@
     "status": "Estado",
     "time": "Tiempo",
     "ms": "ms",
-    "addHeader": "Añadir encabezado",
+    "addHeader": "Añadir Header",
     "key": "Clave",
     "value": "Valor",
     "actions": "Acciones",
@@ -46,7 +53,15 @@
     "text": "Texto",
     "prettify": "Embellecer",
     "enterUrl": "Por favor, introduce una URL",
-    "invalidJson": "Formato JSON inválido"
+    "invalidJson": "Formato JSON inválido",
+    "description": "Prueba tus REST APIs con nuestro potente cliente",
+    "httpMethod": "Método HTTP",
+    "requestBody": "Cuerpo de la solicitud",
+    "sendRequest": "Enviar solicitud",
+    "sending": "Enviando...",
+    "requestFailed": "Solicitud fallida",
+    "error": "Error",
+    "generatedCode": "Código generado"
   },
   "variables": {
     "title": "Variables",
@@ -83,7 +98,7 @@
     "headers": "Encabezados"
   },
   "codeGenerator": {
-    "title": "Generador de código",
+    "title": "Código generado",
     "language": "Idioma",
     "copy": "Copiar",
     "copied": "¡Copiado!",
@@ -93,7 +108,8 @@
     "python": "Python",
     "java": "Java",
     "csharp": "C#",
-    "go": "Go"
+    "go": "Go",
+    "enterUrl": "Por favor, introduce una URL para generar código"
   },
   "common": {
     "close": "Cerrar",
@@ -129,5 +145,15 @@
     "english": "English",
     "russian": "Русский",
     "spanish": "Español"
+  },
+  "about": {
+    "title": "Nuestro Equipo de Desarrollo",
+    "description": "Somos un equipo apasionado de desarrolladores que se unió a través del programa RS School. Nuestras diversas habilidades y enfoque colaborativo nos permitieron crear un producto del que estamos orgullosos. Cada uno de nosotros contribuyó con algo propio: uno pensó la lógica, otro siguió el diseño, el tercero optimizó el rendimiento. El resultado fue un proyecto en el que invertimos conocimiento, tiempo y, por supuesto, un par de noches sin dormir antes de las fechas límite.",
+    "githubProfile": "Perfil de GitHub",
+    "teamLead": "Líder del Equipo",
+    "frontendDeveloper": "Desarrollador Frontend",
+    "veronikaBio": "Estudiante de 3er año. En el proyecto, combino los roles de organizadora y programadora: distribuyo tareas, superviso plazos y escribo código al mismo tiempo. Cuando no estoy en la computadora, bailo o toco el piano, ¡porque la vida debe ser multifacética!",
+    "vladBio": "Vlad tiene una licenciatura del Instituto de Tecnología Electrónica de Moscú (2023). Domina el inglés a nivel B2 y tiene habilidades intermedias de alemán a nivel A2/B1. Responsable de implementar toda la infraestructura de Firebase. Desarrolló el sistema de autenticación segura.",
+    "kirillBio": "Más de veinte años en puestos de liderazgo en varios proyectos empresariales, inglés B1-B2, español B1, experiencia en 1C y desarrollo web. En el proyecto, demostró que se puede trabajar con igual confianza tanto con la arquitectura de construcción como con la arquitectura de aplicaciones."
   }
 }

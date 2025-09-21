@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { generateCode, getSupportedLanguages } from '../../utils/codeGenerator';
 import type { HttpMethod, HeaderItem } from '../../types/interfaces';
 import './CodeGenerator.sass';
@@ -13,6 +14,7 @@ interface CodeGeneratorProps {
 }
 
 export default function CodeGenerator({ method, url, headers, bodyContent }: CodeGeneratorProps) {
+  const t = useTranslations('codeGenerator');
   const [selectedLanguage, setSelectedLanguage] = useState('curl');
   const languages = getSupportedLanguages();
 
@@ -50,7 +52,7 @@ export default function CodeGenerator({ method, url, headers, bodyContent }: Cod
   return (
     <div className="code-generator">
       <div className="code-generator__header">
-        <h3 className="code-generator__title">Generated Code</h3>
+        <h3 className="code-generator__title">{t('title')}</h3>
         <div className="code-generator__controls">
           <select
             value={selectedLanguage}
@@ -79,7 +81,7 @@ export default function CodeGenerator({ method, url, headers, bodyContent }: Cod
       <div className="code-generator__content">
         {!hasEnoughData ? (
           <div className="code-generator__message">
-            <p>Please enter a URL to generate code</p>
+            <p>{t('enterUrl')}</p>
           </div>
         ) : (
           <pre className="code-generator__code" data-testid="generated-code">

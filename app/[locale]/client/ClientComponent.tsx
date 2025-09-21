@@ -10,6 +10,7 @@ import { useUrlSync } from '../../hooks/useUrlSync';
 import { useVariables } from '../../hooks/useVariables';
 import { substituteVariables, substituteVariablesInJson } from '../../utils/variableSubstitution';
 import type { HttpMethod, HeaderItem, RequestState } from '../../types/interfaces';
+import { useTranslations } from 'next-intl';
 
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../firebase/firebase';
@@ -19,6 +20,7 @@ import { useSearchParams } from 'next/navigation';
 import './ClientComponent.sass';
 
 export default function ClientComponent() {
+  const t = useTranslations('client');
   const [selectedMethod, setSelectedMethod] = useState<HttpMethod>('GET');
   const [url, setUrl] = useState<string>('');
   const [headers, setHeaders] = useState<HeaderItem[]>([]);
@@ -156,7 +158,7 @@ export default function ClientComponent() {
       setIsStateRestored(false);
       const timer = setTimeout(() => {
         if (!url.trim()) {
-          setError('Please enter a URL');
+          setError(t('enterUrl'));
           return;
         }
 
@@ -199,12 +201,12 @@ export default function ClientComponent() {
           .then(async (apiResponse) => {
             const data = await apiResponse.json();
             if (!apiResponse.ok) {
-              throw new Error(data.error || 'Request failed');
+              throw new Error(data.error || t('requestFailed'));
             }
             setResponse(data);
           })
           .catch((err) => {
-            setError(err instanceof Error ? err.message : 'Request failed');
+            setError(err instanceof Error ? err.message : t('requestFailed'));
           })
           .finally(() => {
             setLoading(false);
@@ -213,7 +215,7 @@ export default function ClientComponent() {
 
       return () => clearTimeout(timer);
     }
-  }, [isStateRestored, url, selectedMethod, headers, bodyContent, substituteRequestVariables]);
+  }, [isStateRestored, url, selectedMethod, headers, bodyContent, substituteRequestVariables, t]);
 
   const handleMethodChange = (method: HttpMethod) => {
     setSelectedMethod(method);
@@ -237,7 +239,7 @@ export default function ClientComponent() {
 
   const handleSendRequest = async () => {
     if (!url.trim()) {
-      setError('Please enter a URL');
+      setError(t('enterUrl'));
       return;
     }
 
@@ -303,7 +305,7 @@ export default function ClientComponent() {
       }
 
       if (!apiResponse.ok) {
-        throw new Error(data?.error || 'Request failed');
+        throw new Error(data?.error || t('requestFailed'));
       }
 
       setResponse({
@@ -327,7 +329,7 @@ export default function ClientComponent() {
         timestamp: serverTimestamp(),
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Request failed');
+      setError(err instanceof Error ? err.message : t('requestFailed'));
     } finally {
       setLoading(false);
     }
@@ -336,13 +338,13 @@ export default function ClientComponent() {
   return (
     <div className="client-page-wrapper">
       <div className="client-page">
-        <h1>REST Client</h1>
-        <p className="h2">Test your REST APIs with our powerful client.</p>
+        <h1>{t('title')}</h1>
+        <p className="h2">{t('description')}</p>
 
         <div className="client-interface">
           <div className="client-interface__method">
             <label htmlFor="method-selector" className="client-interface__label">
-              HTTP Method:
+              {t('httpMethod')}:
             </label>
             <MethodSelector selectedMethod={selectedMethod} onMethodChange={handleMethodChange} />
           </div>
@@ -372,21 +374,21 @@ export default function ClientComponent() {
               disabled={loading}
               data-testid="send-button"
             >
-              {loading ? 'Sending...' : 'Send Request'}
+              {loading ? t('sending') : t('sendRequest')}
             </button>
           </div>
         </div>
 
         {error && (
           <div className="response-section response-section--error">
-            <h2>Error</h2>
+            <h2>{t('error')}</h2>
             <p>{error}</p>
           </div>
         )}
 
         {response && (
           <div className="response-section">
-            <h2>Response</h2>
+            <h2>{t('response')}</h2>
 
             <div className="response-status">
               <span
@@ -398,7 +400,7 @@ export default function ClientComponent() {
             </div>
 
             <div className="response-headers">
-              <h3>Headers</h3>
+              <h3>{t('headers')}</h3>
               <div className="headers-list">
                 {Object.entries(response.headers || {}).map(([key, value]) => (
                   <div key={key} className="header-item">
@@ -410,7 +412,7 @@ export default function ClientComponent() {
             </div>
 
             <div className="response-body">
-              <h3>Body</h3>
+              <h3>{t('body')}</h3>
               <pre className="response-body-content">
                 {typeof response.data === 'string'
                   ? response.data

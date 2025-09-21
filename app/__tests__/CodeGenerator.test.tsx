@@ -34,7 +34,7 @@ describe('CodeGenerator Component', () => {
   it('renders code generator with default language', () => {
     render(<CodeGenerator {...defaultProps} />);
 
-    expect(screen.getByText('Generated Code')).toBeInTheDocument();
+    expect(screen.getByText('title')).toBeInTheDocument();
     expect(screen.getByTestId('language-selector')).toBeInTheDocument();
     expect(screen.getByTestId('generated-code')).toBeInTheDocument();
   });
@@ -42,7 +42,7 @@ describe('CodeGenerator Component', () => {
   it('shows message when URL is empty', () => {
     render(<CodeGenerator {...defaultProps} url="" />);
 
-    expect(screen.getByText('Please enter a URL to generate code')).toBeInTheDocument();
+    expect(screen.getByText('enterUrl')).toBeInTheDocument();
     expect(screen.queryByTestId('copy-button')).not.toBeInTheDocument();
     expect(screen.queryByTestId('generated-code')).not.toBeInTheDocument();
   });

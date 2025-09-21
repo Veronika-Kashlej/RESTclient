@@ -113,7 +113,7 @@ describe('Home Component', () => {
 
     render(<Home />);
 
-    expect(screen.getByText('Welcome!')).toBeInTheDocument();
+    expect(screen.getByText('welcome')).toBeInTheDocument();
     expect(screen.getByText('Sign In')).toBeInTheDocument();
     expect(screen.getByText('Sign Up')).toBeInTheDocument();
   });
@@ -171,10 +171,10 @@ describe('Home Component', () => {
     render(<Home />);
 
     await waitFor(() => {
-      expect(screen.getByText('Postman clone is here')).toBeInTheDocument();
+      expect(screen.getByText('postmanClone')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Welcome back, test@example.com')).toBeInTheDocument();
+    expect(screen.getByText('welcomeBack, test@example.com')).toBeInTheDocument();
     expect(screen.getByText('Hello from Firebase!')).toBeInTheDocument();
   });
 
@@ -230,7 +230,7 @@ describe('Home Component', () => {
     render(<Home />);
 
     await waitFor(() => {
-      expect(screen.getByText('Postman clone is here')).toBeInTheDocument();
+      expect(screen.getByText('postmanClone')).toBeInTheDocument();
     });
 
     const logoutButton = screen.getByText('Sign Out');

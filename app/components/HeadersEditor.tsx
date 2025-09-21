@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import type { HeaderItem, HeadersEditorProps } from '../types/interfaces';
 import './HeadersEditor.sass';
 
 export default function HeadersEditor({ headers, onHeadersChange }: HeadersEditorProps) {
+  const t = useTranslations('client');
   const [newKey, setNewKey] = useState('');
   const [newValue, setNewValue] = useState('');
 
@@ -99,7 +101,7 @@ export default function HeadersEditor({ headers, onHeadersChange }: HeadersEdito
           disabled={!newKey.trim() || !newValue.trim()}
           data-testid="add-header"
         >
-          Add Header
+          {t('addHeader')}
         </button>
       </div>
     </div>

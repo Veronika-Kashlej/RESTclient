@@ -147,8 +147,8 @@ describe('ClientComponent', () => {
   it('renders ClientComponent with all main elements', () => {
     render(<ClientComponent />);
 
-    expect(screen.getByText('REST Client')).toBeInTheDocument();
-    expect(screen.getByText('Test your REST APIs with our powerful client.')).toBeInTheDocument();
+    expect(screen.getByText('title')).toBeInTheDocument();
+    expect(screen.getByText('description')).toBeInTheDocument();
     expect(screen.getByTestId('method-selector')).toBeInTheDocument();
     expect(screen.getByTestId('url-input')).toBeInTheDocument();
     expect(screen.getByTestId('headers-editor')).toBeInTheDocument();
@@ -193,7 +193,7 @@ describe('ClientComponent', () => {
     const sendButton = screen.getByTestId('send-button');
     fireEvent.click(sendButton);
 
-    expect(sendButton).toHaveTextContent('Sending...');
+    expect(sendButton).toHaveTextContent('sending');
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith(
@@ -217,7 +217,7 @@ describe('ClientComponent', () => {
     fireEvent.click(sendButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Response')).toBeInTheDocument();
+      expect(screen.getByText('response')).toBeInTheDocument();
     });
   });
 
@@ -233,7 +233,7 @@ describe('ClientComponent', () => {
     fireEvent.click(sendButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Error')).toBeInTheDocument();
+      expect(screen.getByText('error')).toBeInTheDocument();
       expect(screen.getByText('Network error')).toBeInTheDocument();
     });
   });
@@ -287,7 +287,7 @@ describe('ClientComponent', () => {
     fireEvent.click(sendButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Request failed')).toBeInTheDocument();
+      expect(screen.getByText('requestFailed')).toBeInTheDocument();
     });
   });
 
@@ -314,7 +314,7 @@ describe('ClientComponent', () => {
     fireEvent.click(sendButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Response')).toBeInTheDocument();
+      expect(screen.getByText('response')).toBeInTheDocument();
     });
   });
 
